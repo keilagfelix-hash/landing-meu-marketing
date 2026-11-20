@@ -399,12 +399,19 @@
   @media (min-width: 768px) { footer .wrap { flex-direction: row; } }
 </style>
 <style>
-  .cookie-banner { position: fixed; left: 16px; right: 16px; bottom: 16px; z-index: 50; max-width: 720px; margin: 0 auto; padding: 16px 18px; border-radius: 16px; background: rgba(14,10,28,0.92); border: 1px solid rgba(148,82,255,0.32); backdrop-filter: blur(16px); color: #b8b0d0; font-size: 14px; line-height: 1.5; display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between; }
-  .cookie-banner a { color: #bf9cff; }
-  .cookie-banner .cb-actions { display: flex; gap: 8px; }
-  .cookie-banner button { border-radius: 10px; padding: 9px 14px; font: inherit; font-weight: 600; cursor: pointer; border: 1px solid rgba(148,82,255,0.32); background: rgba(255,255,255,0.05); color: #fff; }
-  .cookie-banner button.cb-accept { background: linear-gradient(135deg,#5a12f0,#6e22ff 60%,#9452ff); border: none; }
+  .cookie-banner { position: fixed; left: 0; right: 0; bottom: 0; z-index: 60; padding: 16px 20px; background: #0d0a1a; border-top: 1px solid rgba(148,82,255,0.28); box-shadow: 0 -8px 30px rgba(0,0,0,0.45); color: #b8b0d0; font-size: 14px; line-height: 1.55; display: flex; flex-wrap: wrap; gap: 14px; align-items: center; justify-content: space-between; }
+  .cookie-banner .cb-text { display: flex; gap: 12px; align-items: flex-start; flex: 1 1 420px; min-width: 0; }
+  .cookie-banner .cb-icon { flex: 0 0 auto; width: 22px; height: 22px; margin-top: 1px; color: #bf9cff; }
+  .cookie-banner strong { color: #f8f7fc; display: block; margin-bottom: 2px; font-size: 15px; }
+  .cookie-banner a { color: #bf9cff; text-decoration: underline; text-underline-offset: 3px; }
+  .cookie-banner .cb-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+  .cookie-banner button { border-radius: 10px; padding: 10px 18px; font: inherit; font-weight: 700; font-size: 14px; cursor: pointer; border: 1px solid rgba(148,82,255,0.45); background: transparent; color: #f8f7fc; transition: all .2s; }
+  .cookie-banner button:hover { background: rgba(255,255,255,0.06); }
+  .cookie-banner button.cb-accept { background: linear-gradient(135deg,#5a12f0,#6e22ff 60%,#9452ff); border-color: transparent; color: #fff; box-shadow: 0 0 14px rgba(127,61,255,0.30); }
+  .cookie-banner button.cb-accept:hover { filter: brightness(1.08); background: linear-gradient(135deg,#5a12f0,#6e22ff 60%,#9452ff); }
+  .cookie-banner button:focus-visible { outline: 2px solid #9452ff; outline-offset: 2px; }
   .cookie-banner[hidden] { display: none; }
+  @media (max-width: 600px) { .cookie-banner .cb-actions { width: 100%; } .cookie-banner .cb-actions button { flex: 1 1 0; } }
 </style>
 </head>
 <body>
@@ -1141,11 +1148,14 @@
 </script>
 <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 <div class="cookie-banner" id="cookieBanner" hidden role="dialog" aria-label="Preferências de cookies">
-  <span>Usamos cookies de medição de anúncios (Pixel da Meta) para entender a origem dos cadastros. <a href="privacidade.html" target="_blank" rel="noopener">Saiba mais</a></span>
-  <span class="cb-actions">
+  <div class="cb-text">
+    <svg class="cb-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/><circle cx="8.5" cy="10" r="1" fill="currentColor"/><circle cx="12.5" cy="15.5" r="1" fill="currentColor"/><circle cx="8" cy="15" r="0.8" fill="currentColor"/></svg>
+    <p style="margin:0"><strong>Este site usa cookies</strong>Usamos cookies de medição de anúncios (Pixel da Meta) para entender a origem dos cadastros. Você pode aceitar, recusar ou saber mais na <a href="privacidade.html" target="_blank" rel="noopener">Política de Privacidade</a>.</p>
+  </div>
+  <div class="cb-actions">
     <button type="button" id="cbDecline">Recusar</button>
-    <button type="button" class="cb-accept" id="cbAccept">Aceitar</button>
-  </span>
+    <button type="button" class="cb-accept" id="cbAccept">Aceitar cookies</button>
+  </div>
 </div>
 <script>
 (function () {
