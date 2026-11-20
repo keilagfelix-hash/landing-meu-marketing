@@ -204,6 +204,21 @@
   .mock-mode-btn[aria-pressed="true"] {
     background: var(--grad); color: #fff; box-shadow: var(--glow);
   }
+  .tab-bar {
+    display: inline-flex; flex-wrap: wrap; gap: 6px; padding: 4px; border-radius: 14px; margin-bottom: 24px;
+    background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border);
+  }
+  .tab-btn {
+    border: 0; border-radius: 10px; padding: 10px 18px; font: inherit; font-size: 14px; font-weight: 700;
+    background: transparent; color: var(--muted); cursor: pointer; transition: all .2s;
+  }
+  .tab-btn:hover { color: var(--fg); }
+  .tab-btn[aria-selected="true"] {
+    background: var(--grad); color: #fff; box-shadow: var(--glow);
+  }
+  .tab-btn:focus-visible { outline: 2px solid #9452ff; outline-offset: 2px; }
+  .tab-panel[hidden] { display: none; }
+  .tab-panel { padding: 28px; }
   .mock .main-card { padding: 22px; }
   .mock .row { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 16px; }
   .mock .row b { font-size: 16px; }
