@@ -701,6 +701,7 @@
 
       <div id="formWrap">
         <form class="glass lead" id="leadForm" novalidate>
+          <input type="text" name="website" id="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">
           <div class="fields">
             <div class="field-group">
               <label for="nome">Seu nome</label>
@@ -1091,11 +1092,13 @@
     submitBtn.disabled = true;
     submitBtn.innerHTML = '<span class="spinner" aria-hidden="true"></span> Enviando';
     try {
-      /* Envio sem preflight CORS (form-urlencoded + no-cors): o Make não responde OPTIONS,
-         então o JSON com application/json era bloqueado pelo navegador. A resposta é opaca,
-         por isso o sucesso aqui significa "enviado", não "processado". */
+      /* Envio form-urlencoded (requisição simples, sem preflight). O Apps Script responde JSON
+         legível: {"ok":true} só quando o Turnstile foi validado e a linha foi gravada. */
+      payload.website = (document.getElementById("website") || {}).value || "";
       const body = new URLSearchParams(Object.entries(payload).map(([k, v]) => [k, v == null ? "" : String(v)]));
-      await fetch(LEAD_ENDPOINT, { method: "POST", mode: "no-cors", body });
+      const res = await fetch(LEAD_ENDPOINT, { method: "POST", body });
+      const result = await res.json().catch(() => ({ ok: false }));
+      if (!result.ok) throw new Error("rejeitado");
       document.getElementById("formWrap").innerHTML = `
         <div class="glass success" role="status">
           <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M8 12l3 3 5-6"/></svg>
@@ -1107,7 +1110,8 @@
     } catch (err) {
       submitBtn.disabled = false;
       submitBtn.textContent = "Quero meu teste grátis →";
-      formError.textContent = "Não conseguimos enviar agora. Tente novamente em instantes.";
+      if (window.turnstile && typeof window.turnstile.reset === "function") window.turnstile.reset();
+      formError.textContent = "Não conseguimos confirmar seu envio. Confirme a verificação e tente novamente.";
       formError.hidden = false;
     }
   });
