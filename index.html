@@ -383,23 +383,14 @@
   footer a:hover { color: var(--fg); }
   @media (min-width: 768px) { footer .wrap { flex-direction: row; } }
 </style>
-<!-- Meta Pixel Code -->
-<script>
-!function(f,b,e,v,n,t,s)
-{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-n.queue=[];t=b.createElement(e);t.async=!0;
-t.src=v;s=b.getElementsByTagName(e)[0];
-s.parentNode.insertBefore(t,s)}(window, document,'script',
-'https://connect.facebook.net/en_US/fbevents.js');
-fbq('init', '1598613195371742');
-fbq('track', 'PageView');
-</script>
-<noscript><img height="1" width="1" style="display:none"
-src="https://www.facebook.com/tr?id=1598613195371742&ev=PageView&noscript=1"
-/></noscript>
-<!-- End Meta Pixel Code -->
+<style>
+  .cookie-banner { position: fixed; left: 16px; right: 16px; bottom: 16px; z-index: 50; max-width: 720px; margin: 0 auto; padding: 16px 18px; border-radius: 16px; background: rgba(14,10,28,0.92); border: 1px solid rgba(148,82,255,0.32); backdrop-filter: blur(16px); color: #b8b0d0; font-size: 14px; line-height: 1.5; display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between; }
+  .cookie-banner a { color: #bf9cff; }
+  .cookie-banner .cb-actions { display: flex; gap: 8px; }
+  .cookie-banner button { border-radius: 10px; padding: 9px 14px; font: inherit; font-weight: 600; cursor: pointer; border: 1px solid rgba(148,82,255,0.32); background: rgba(255,255,255,0.05); color: #fff; }
+  .cookie-banner button.cb-accept { background: linear-gradient(135deg,#5a12f0,#6e22ff 60%,#9452ff); border: none; }
+  .cookie-banner[hidden] { display: none; }
+</style>
 </head>
 <body>
 
@@ -1134,5 +1125,45 @@ src="https://www.facebook.com/tr?id=1598613195371742&ev=PageView&noscript=1"
   });
 </script>
 <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+<div class="cookie-banner" id="cookieBanner" hidden role="dialog" aria-label="Preferências de cookies">
+  <span>Usamos cookies de medição de anúncios (Pixel da Meta) para entender a origem dos cadastros. <a href="privacidade.html" target="_blank" rel="noopener">Saiba mais</a></span>
+  <span class="cb-actions">
+    <button type="button" id="cbDecline">Recusar</button>
+    <button type="button" class="cb-accept" id="cbAccept">Aceitar</button>
+  </span>
+</div>
+<script>
+(function () {
+  var PIXEL_ID = "1598613195371742";
+  var KEY = "mm_cookies";
+
+  function loadPixel() {
+    if (window.__pixelLoaded) return;
+    window.__pixelLoaded = true;
+    !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+    window.fbq("init", PIXEL_ID);
+    window.fbq("track", "PageView");
+  }
+
+  var banner = document.getElementById("cookieBanner");
+  var choice = null;
+  try { choice = localStorage.getItem(KEY); } catch (e) {}
+
+  if (choice === "aceito") loadPixel();
+  else if (choice !== "recusado") banner.hidden = false;
+
+  function save(v) {
+    try { localStorage.setItem(KEY, v); } catch (e) {}
+    banner.hidden = true;
+  }
+  document.getElementById("cbAccept").addEventListener("click", function () { save("aceito"); loadPixel(); });
+  document.getElementById("cbDecline").addEventListener("click", function () { save("recusado"); });
+})();
+</script>
 </body>
 </html>
