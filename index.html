@@ -741,6 +741,7 @@
             </label>
             <p class="err" id="consent-err" role="alert"></p>
           </div>
+          <div class="cf-turnstile" data-sitekey="0x4AAAAAAGK3HbS0x5djP3K0" data-theme="dark"></div>
           <p class="form-error" id="formError" role="alert" hidden></p>
           <button class="btn btn-primary btn-block" type="submit" id="submitBtn">Quero meu teste grátis →</button>
           <p class="form-note">Usamos seus dados só para liberar seu teste e falar com você sobre ele. Não cobramos antes do fim do período de 14 dias. Detalhes na Política de Privacidade.</p>
@@ -1073,6 +1074,13 @@
     const q = new URLSearchParams(window.location.search);
     const utm = (k) => (q.get(k) || "").slice(0, 200) || null;
     const payload = { ...data, utm_source: utm("utm_source"), utm_medium: utm("utm_medium"), utm_campaign: utm("utm_campaign") };
+    const cfToken = (document.querySelector('[name="cf-turnstile-response"]') || {}).value || "";
+    if (!cfToken) {
+      formError.textContent = "Confirme que você não é um robô e tente de novo.";
+      formError.hidden = false;
+      return;
+    }
+    payload["cf-turnstile-response"] = cfToken;
 
     if (!LEAD_ENDPOINT) {
       formError.textContent = "Formulário não configurado: defina LEAD_ENDPOINT no código.";
@@ -1104,5 +1112,6 @@
     }
   });
 </script>
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 </body>
 </html>
