@@ -3,13 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Meu Marketing — Aprovação de conteúdo para agências</title>
-<meta name="description" content="Aplicativo para agências de marketing digital: o cliente aprova posts em um toque, com histórico de versões e controle das publicações do contrato. Teste grátis por 14 dias.">
+<title>Meu Marketing — Aprovação de conteúdo e contratos para agências</title>
+<meta name="description" content="Suas aprovações, contratos e clientes fora do WhatsApp. Sua equipe prepara, você revisa e o cliente aprova em um toque. Teste grátis por 14 dias.">
 <meta property="og:title" content="Meu Marketing — Aprovação de conteúdo para agências">
 <meta property="og:description" content="Aprovações, contratos e clientes fora do WhatsApp. Teste grátis por 14 dias.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://meumarketing.app.br">
 <link rel="canonical" href="https://meumarketing.app.br">
+<link rel="icon" type="image/png" sizes="64x64" href="assets/logo-mark.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -18,1047 +19,589 @@
     --bg: #050509;
     --fg: #f8f7fc;
     --muted: #b8b0d0;
-    --label: #d4cfe4;
     --accent: #b58cff;
-    --success: #34d399;
-    --warn: #fbbf24;
-    --border: rgba(148, 82, 255, 0.22);
-    --input: rgba(148, 82, 255, 0.32);
-    --grad: linear-gradient(135deg, #5a12f0, #6e22ff, #9452ff);
-    --grad-text: linear-gradient(90deg, #8b4dff, #b58cff, #e0ccff);
-    --glow: 0 0 18px rgba(127, 61, 255, 0.35);
+    --ok: #34d399;
+    --line: rgba(148, 82, 255, 0.22);
+    --grad: linear-gradient(135deg, #5a12f0, #6e22ff 60%, #9452ff);
+    --grad-text: linear-gradient(90deg, #7f3dff, #a06bff, #bf9cff);
+    --glass: rgba(22, 14, 44, 0.55);
+    --shadow-card: 0 18px 40px rgba(0, 0, 0, 0.45);
   }
-  * { box-sizing: border-box; border-color: var(--border); }
-  html { scroll-behavior: smooth; scroll-padding-top: 5.5rem; }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; scroll-padding-top: 88px; }
   body {
     margin: 0; background: var(--bg); color: var(--fg);
-    font-family: "Inter Tight", ui-sans-serif, system-ui, sans-serif;
-    -webkit-font-smoothing: antialiased; line-height: 1.5;
-    overflow-x: hidden;
+    font-family: "Inter Tight", system-ui, -apple-system, "Segoe UI", sans-serif;
+    font-size: 16px; line-height: 1.6; -webkit-font-smoothing: antialiased;
   }
-
-  /* Textura sutil de ruído para tirar o aspecto liso de template */
-  body::before {
-    content: ""; position: fixed; inset: 0; pointer-events: none !important; z-index: 999;
-    opacity: 0.032;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  }
-
-  h1, h2, h3 { font-weight: 800; letter-spacing: -0.035em; line-height: 1.08; margin: 0; }
-  p { margin: 0; }
+  img { max-width: 100%; display: block; }
   a { color: inherit; }
-  img, svg { display: block; }
-  :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
-  @media (prefers-reduced-motion: reduce) {
-    html { scroll-behavior: auto; }
-    *, *::before, *::after { animation: none !important; transition: none !important; }
-    .reveal { opacity: 1 !important; transform: none !important; }
-  }
-
-  .wrap { max-width: 1152px; margin: 0 auto; padding: 0 20px; }
-  section { padding: 96px 20px; position: relative; }
-  .ambient {
-    background:
-      radial-gradient(55% 45% at 72% 18%, rgba(110, 34, 255, 0.18), transparent 70%),
-      radial-gradient(40% 40% at 10% 60%, rgba(127, 61, 255, 0.09), transparent 70%);
-  }
+  :focus-visible { outline: 2px solid #9452ff; outline-offset: 3px; border-radius: 6px; }
+  .wrap { width: min(1120px, 92vw); margin: 0 auto; }
+  section { padding: 96px 0; position: relative; }
+  h1, h2, h3 { line-height: 1.12; letter-spacing: -0.02em; margin: 0; font-weight: 800; }
+  h1 { font-size: clamp(38px, 5.4vw, 64px); }
+  h2 { font-size: clamp(30px, 3.6vw, 44px); }
+  h3 { font-size: 19px; letter-spacing: -0.01em; }
+  p { margin: 0; color: var(--muted); }
   .text-gradient {
     background: var(--grad-text); -webkit-background-clip: text; background-clip: text; color: transparent;
   }
+  .eyebrow { font-size: 14px; font-weight: 600; color: var(--accent); margin-bottom: 14px; }
+  .head { max-width: 680px; margin-bottom: 48px; }
+  .head p { margin-top: 16px; font-size: 18px; }
 
-  /* Glass com efeito Spotlight dinâmico via variáveis CSS --mx e --my */
-  .glass {
-    position: relative;
-    background: rgba(20, 13, 38, 0.62);
-    backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(169, 122, 255, 0.24);
-    border-radius: 18px;
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.09), 0 14px 34px rgba(0, 0, 0, 0.55);
-    transition: transform .28s cubic-bezier(.22,1,.36,1), border-color .28s ease, box-shadow .28s ease;
-    overflow: hidden;
-  }
-  .glass > * { position: relative; z-index: 2; }
-  .glass::after {
-    content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none !important; z-index: 1;
-    background: radial-gradient(420px circle at var(--mx, 50%) var(--my, 50%), rgba(169, 122, 255, 0.14), transparent 45%);
-    opacity: 0; transition: opacity .3s ease;
-  }
-  .glass:hover::after { opacity: 1; }
-  .glass.interactive-card:hover {
-    transform: translateY(-4px);
-    border-color: rgba(181, 140, 255, 0.5);
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 18px 40px rgba(0, 0, 0, 0.65), 0 0 28px rgba(127, 61, 255, 0.16);
-  }
-
-  /* Scroll Reveal */
-  .reveal {
-    opacity: 0; transform: translateY(22px);
-    transition: opacity .65s cubic-bezier(.22,1,.36,1), transform .65s cubic-bezier(.22,1,.36,1);
-  }
-  .reveal.in { opacity: 1; transform: translateY(0); }
-
+  /* Botões */
   .btn {
-    position: relative; z-index: 5;
     display: inline-flex; align-items: center; justify-content: center; gap: 8px;
     min-height: 48px; padding: 0 22px; border-radius: 14px; font: inherit; font-weight: 700;
-    text-decoration: none; cursor: pointer; transition: transform .18s cubic-bezier(.22,1,.36,1), box-shadow .2s ease, border-color .2s ease, background .2s ease;
-    user-select: none; -webkit-tap-highlight-color: transparent;
+    font-size: 16px; text-decoration: none; border: 1px solid transparent; cursor: pointer;
+    transition: transform .15s ease, filter .15s ease, background .15s ease;
   }
-  .btn:hover { transform: translateY(-2px); }
-  .btn:active { transform: translateY(1px) scale(0.97); }
-  .btn-primary {
-    background: var(--grad); color: #fff; border: 1px solid rgba(181, 140, 255, 0.35); box-shadow: var(--glow);
-  }
-  .btn-primary:hover { border-color: var(--accent); box-shadow: 0 6px 26px rgba(127, 61, 255, 0.55); }
-  .btn-primary:disabled { opacity: .6; cursor: not-allowed; transform: none; }
-  .btn-secondary {
-    background: rgba(255, 255, 255, 0.06); color: var(--fg); font-weight: 600; border: 1px solid rgba(148, 82, 255, 0.35);
-  }
-  .btn-secondary:hover { border-color: var(--accent); background: rgba(148, 82, 255, 0.16); box-shadow: 0 4px 18px rgba(127, 61, 255, 0.22); }
+  .btn:hover { transform: translateY(-1px); }
+  .btn-primary { background: var(--grad); color: #fff; box-shadow: 0 0 14px rgba(127, 61, 255, 0.30); }
+  .btn-primary:hover { filter: brightness(1.08); }
+  .btn-primary:disabled { opacity: .6; cursor: default; transform: none; }
+  .btn-ghost { background: rgba(255, 255, 255, 0.05); border-color: rgba(148, 82, 255, 0.32); color: var(--fg); }
+  .btn-ghost:hover { background: rgba(255, 255, 255, 0.09); }
   .btn-block { width: 100%; }
+  .actions { display: flex; flex-wrap: wrap; gap: 12px; }
 
-  .eyebrow { margin-bottom: 12px; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: .14em; color: var(--accent); }
-  .muted { color: var(--muted); }
-  .icon-tile {
-    width: 44px; height: 44px; border-radius: 12px; background: var(--grad);
-    box-shadow: var(--glow); display: flex; align-items: center; justify-content: center; margin-bottom: 20px;
+  /* Superfícies glass */
+  .glass {
+    background: var(--glass); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(127, 61, 255, 0.12); border-radius: 18px; box-shadow: var(--shadow-card);
+    position: relative;
   }
-  .icon-tile svg { width: 20px; height: 20px; stroke: #fff; fill: none; stroke-width: 2; }
+  .glass::before {
+    content: ""; position: absolute; inset: 0; border-radius: inherit; padding: 1px; pointer-events: none;
+    background: linear-gradient(180deg, rgba(169,122,255,0.45), rgba(169,122,255,0.28) 30%, rgba(127,61,255,0.12) 70%, rgba(181,140,255,0.16));
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor; mask-composite: exclude;
+  }
   .card { padding: 26px; }
-  .card h3 { font-size: 18px; margin-bottom: 8px; }
-  .grid { display: grid; gap: 20px; }
-  .g4 { grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); }
-  .g3 { grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); }
-  .g2 { grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
-  .head { text-align: center; max-width: 660px; margin: 0 auto 48px; }
-  .head h2 { font-size: clamp(30px, 4.5vw, 44px); }
-  .head p { margin-top: 16px; font-size: 18px; color: var(--muted); }
-  .check { list-style: none; padding: 0; margin: 0; display: grid; gap: 14px; }
-  .check li { display: flex; gap: 12px; color: var(--label); font-size: 16px; }
-  .check svg { flex: none; width: 20px; height: 20px; margin-top: 2px; stroke: var(--accent); fill: none; stroke-width: 2.4; }
 
-  /* header */
+  /* Barra fixa */
   header.top {
-    position: fixed; inset: 0 0 auto 0; z-index: 50; height: 72px;
-    background: rgba(5, 5, 9, 0.78); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-    border-bottom: 1px solid var(--border);
+    position: sticky; top: 0; z-index: 50; background: rgba(5, 5, 9, 0.72);
+    backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border-bottom: 1px solid rgba(148,82,255,0.12);
   }
-  header.top .wrap { height: 72px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+  header.top .wrap { height: 72px; display: flex; align-items: center; gap: 24px; }
   .logo { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 18px; text-decoration: none; }
-  .logo b { color: var(--accent); font-weight: 800; }
-  nav.main { display: flex; gap: 32px; }
-  nav.main a { font-size: 14px; font-weight: 500; color: var(--muted); text-decoration: none; transition: color .2s; }
-  nav.main a:hover { color: var(--fg); }
-  .btn-nav { min-height: 40px; padding: 0 18px; font-size: 14px; }
-  .menu-btn {
-    display: none; min-height: 44px; min-width: 44px; background: rgba(255,255,255,.05);
-    border: 1px solid rgba(148,82,255,.32); border-radius: 12px; color: var(--fg); cursor: pointer;
-  }
-  .menu-btn svg { width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-width: 2; margin: auto; }
-  .mobile-nav {
-    display: none; position: absolute; top: 72px; left: 0; right: 0; padding: 12px 20px 20px;
-    background: #0c0818; border-bottom: 1px solid var(--border);
-  }
-  .mobile-nav.open { display: grid; gap: 4px; }
-  .mobile-nav a { padding: 12px; border-radius: 12px; font-size: 17px; font-weight: 600; text-decoration: none; }
-  .mobile-nav a:hover { background: rgba(255,255,255,.05); }
-  .mobile-nav .btn { margin-top: 10px; }
-  @media (max-width: 820px) {
-    nav.main { display: none; }
-    .btn-nav { display: none; }
-    .menu-btn { display: block; }
-  }
+  .logo img { width: 36px; height: 36px; }
+  header nav.main { display: flex; gap: 26px; margin-left: auto; }
+  header nav.main a { color: var(--muted); text-decoration: none; font-size: 15px; font-weight: 500; }
+  header nav.main a:hover { color: var(--fg); }
+  header .btn { min-height: 42px; padding: 0 18px; font-size: 15px; margin-left: 8px; }
 
-  /* hero */
-  .hero { padding-top: 136px; padding-bottom: 84px; }
-  .hero-grid { display: grid; gap: 56px; align-items: center; }
-  @media (min-width: 1024px) { .hero-grid { grid-template-columns: 1.08fr 1fr; } }
+  /* Hero */
+  .hero { padding: 72px 0 96px; overflow: hidden; }
+  .hero-grid { display: grid; grid-template-columns: 1.05fr .95fr; gap: 56px; align-items: center; }
+  .badge {
+    display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; border-radius: 999px;
+    font-size: 14px; font-weight: 600; color: #d9c7ff; border: 1px solid rgba(148,82,255,0.32);
+    background: rgba(127,61,255,0.10); margin-bottom: 22px;
+  }
+  .hero h1 { margin-bottom: 22px; }
+  .hero .sub { font-size: 19px; max-width: 540px; margin-bottom: 32px; }
+  .hero .micro { margin-top: 18px; font-size: 14px; color: #8f87a8; }
+  .platforms { margin-top: 28px; font-size: 14px; color: #8f87a8; }
+
+  .mock { padding: 22px; }
+  .mock-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; }
+  .mock-top small { color: #8f87a8; font-size: 13px; }
   .pill {
-    display: inline-flex; align-items: center; gap: 8px; margin-bottom: 24px; padding: 6px 16px; border-radius: 999px;
-    border: 1px solid var(--input); background: rgba(148, 82, 255, 0.1); font-size: 13px; font-weight: 600; color: var(--label);
+    font-size: 12px; font-weight: 700; padding: 4px 10px; border-radius: 999px;
+    background: rgba(251, 191, 36, 0.12); color: #fbbf24; border: 1px solid rgba(251,191,36,.3);
   }
-  .pill .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 8px var(--accent); }
-  .hero h1 { font-size: clamp(38px, 5.8vw, 62px); line-height: 1.04; }
-  .hero .lead { margin-top: 24px; max-width: 550px; font-size: 18px; color: var(--muted); }
-  .hero .ctas { margin-top: 32px; display: flex; flex-wrap: wrap; gap: 12px; }
-  .hero .small { margin-top: 24px; font-size: 14px; color: var(--muted); }
+  .mock-post {
+    border-radius: 14px; padding: 16px; background: rgba(5,5,9,0.55); border: 1px solid rgba(148,82,255,0.18);
+  }
+  .mock-post strong { display: block; font-size: 15px; margin-bottom: 6px; }
+  .mock-post p { font-size: 14px; }
+  .mock-actions { display: flex; gap: 8px; margin-top: 14px; }
+  .mock-actions span { flex: 1; text-align: center; font-size: 13px; font-weight: 700; padding: 9px; border-radius: 10px; }
+  .mock-actions .ok { background: rgba(52,211,153,0.14); color: var(--ok); }
+  .mock-actions .adj { background: rgba(255,255,255,0.05); color: var(--fg); }
+  .meter { margin-top: 20px; }
+  .meter-row { display: flex; justify-content: space-between; font-size: 14px; color: var(--muted); margin-bottom: 8px; }
+  .bar { height: 8px; border-radius: 999px; background: rgba(255,255,255,0.07); overflow: hidden; }
+  .bar i { display: block; height: 100%; width: 62.5%; background: var(--grad); border-radius: inherit; }
+  .mock-note { font-size: 12px; color: #6f6889; margin-top: 16px; }
 
-  /* Mockup Interativo */
-  .mock { position: relative; max-width: 460px; width: 100%; margin: 0 auto; }
-  .mock-top-bar {
-    display: flex; align-items: center; justify-content: space-between; gap: 10px;
-    margin-bottom: 12px; flex-wrap: wrap;
-  }
-  .mock-badge {
-    display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600;
-    color: var(--accent);
-  }
-  .mock-mode-switch {
-    display: inline-flex; padding: 3px; border-radius: 10px;
-    background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border);
-  }
-  .mock-mode-btn {
-    border: 0; border-radius: 8px; padding: 5px 10px; font: inherit; font-size: 12px; font-weight: 700;
-    background: transparent; color: var(--muted); cursor: pointer; transition: all .2s;
-  }
-  .mock-mode-btn[aria-pressed="true"] {
-    background: var(--grad); color: #fff; box-shadow: var(--glow);
-  }
-  .tab-bar {
-    display: inline-flex; flex-wrap: wrap; gap: 6px; padding: 4px; border-radius: 14px; margin-bottom: 24px;
-    background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border);
-  }
-  .tab-btn {
-    border: 0; border-radius: 10px; padding: 10px 18px; font: inherit; font-size: 14px; font-weight: 700;
-    background: transparent; color: var(--muted); cursor: pointer; transition: all .2s;
-  }
-  .tab-btn:hover { color: var(--fg); }
-  .tab-btn[aria-selected="true"] {
-    background: var(--grad); color: #fff; box-shadow: var(--glow);
-  }
-  .tab-btn:focus-visible { outline: 2px solid #9452ff; outline-offset: 2px; }
-  .tab-panel[hidden] { display: none; }
-  .tab-panel { padding: 28px; }
-  .mock .main-card { padding: 22px; }
-  .mock .row { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 16px; }
-  .mock .row b { font-size: 16px; }
-  .chip {
-    padding: 4px 12px; border-radius: 999px; border: 1px solid var(--input); background: rgba(255,255,255,.05);
-    font-size: 12px; font-weight: 600; color: var(--accent); white-space: nowrap; transition: all .25s ease;
-  }
-  .chip.approved { border-color: rgba(52, 211, 153, 0.4); background: rgba(52, 211, 153, 0.12); color: var(--success); }
-  .chip.revision { border-color: rgba(251, 191, 36, 0.4); background: rgba(251, 191, 36, 0.12); color: var(--warn); }
+  /* Dor */
+  .pain-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 18px; }
+  .pain h3 { margin-bottom: 10px; }
 
-  .mock .media {
-    position: relative; aspect-ratio: 16 / 10; border-radius: 14px; margin-bottom: 14px; overflow: hidden;
-    background: linear-gradient(135deg, #24104d, #4818a8 55%, #160b2e);
-    border: 1px solid rgba(181, 140, 255, 0.25); padding: 18px;
-    display: flex; flex-direction: column; justify-content: space-between;
-  }
-  .mock-art-tag {
-    align-self: flex-start; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em;
-    padding: 4px 10px; border-radius: 6px; background: rgba(5,5,9,0.55); color: #fff;
-  }
-  .mock-art-copy strong { display: block; font-size: 18px; letter-spacing: -0.02em; color: #fff; }
-  .mock-art-copy span { font-size: 13px; color: rgba(255,255,255,0.78); }
+  /* Como funciona */
+  .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 18px; list-style: none; padding: 0; margin: 0; counter-reset: none; }
+  .step { padding: 26px; }
+  .step .n { display: inline-block; font-size: 14px; font-weight: 700; color: var(--accent); margin-bottom: 14px; }
+  .step h3 { margin-bottom: 8px; }
 
-  .mock-caption-box {
-    background: rgba(5, 5, 9, 0.45); border: 1px solid rgba(148, 82, 255, 0.2);
-    border-radius: 10px; padding: 10px 12px; margin-bottom: 14px; font-size: 13px; color: var(--label);
+  /* Recursos */
+  .feat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 18px; }
+  .feat-icon {
+    width: 42px; height: 42px; border-radius: 12px; display: grid; place-items: center; margin-bottom: 18px;
+    background: var(--grad); box-shadow: var(--glow, 0 0 18px rgba(127,61,255,.35));
   }
-  .mock-caption-meta { display: flex; justify-content: space-between; font-size: 12px; color: var(--muted); margin-bottom: 4px; }
-  .mock .btns { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-  .mock .btns button { min-height: 44px; font-size: 14px; }
+  .feat-icon svg { width: 22px; height: 22px; fill: none; stroke: #fff; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
+  .feat h3 { margin-bottom: 8px; }
 
-  .mock-feedback {
-    margin-top: 12px; padding: 10px 12px; border-radius: 10px; font-size: 13px;
-    background: rgba(148, 82, 255, 0.12); border: 1px solid rgba(148, 82, 255, 0.3);
-    display: flex; align-items: center; justify-content: space-between; gap: 8px;
-  }
-  .mock-feedback[hidden] { display: none; }
-  .mock-reset {
-    background: none; border: 0; color: var(--accent); font: inherit; font-size: 12px;
-    font-weight: 700; text-decoration: underline; cursor: pointer; padding: 4px;
-  }
+  /* Agência x Cliente */
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  .two .card ul { margin: 18px 0 0; padding: 0; list-style: none; display: grid; gap: 12px; }
+  .two .card li { display: flex; gap: 10px; color: var(--fg); font-size: 16px; }
+  .two .card li::before { content: "✓"; color: var(--ok); font-weight: 800; }
+  .two h3 { font-size: 24px; }
 
-  .mock .counter {
-    position: relative; margin: -18px 0 0 auto; width: 88%; padding: 18px 20px; max-width: 100%;
-    background: rgba(14, 9, 28, 0.92);
-  }
-  .mock .counter .row { margin-bottom: 10px; }
-  .mock .counter .row p:first-child { font-size: 13px; font-weight: 600; color: var(--label); }
-  .mock .counter .row p:last-child { font-size: 13px; font-weight: 700; color: var(--accent); }
-  .bar-track { height: 10px; border-radius: 99px; background: rgba(255,255,255,.08); overflow: hidden; }
-  .bar-fill { height: 100%; width: 60%; border-radius: 99px; background: var(--grad); transition: width .45s cubic-bezier(.22,1,.36,1); }
-  @media (min-width: 640px) { .mock .counter { margin-right: -24px; } }
+  /* Segurança */
+  .trust { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 18px; }
 
-  /* Seção Para Quem É (Right Fit) */
-  .fit-grid { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); }
-  .fit-card {
-    text-align: left; cursor: pointer; padding: 24px; border-radius: 18px;
-    display: flex; flex-direction: column; gap: 12px; font: inherit; color: inherit;
-  }
-  .fit-card[aria-pressed="true"] {
-    border-color: var(--accent);
-    background: rgba(90, 18, 240, 0.16);
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 0 28px rgba(127, 61, 255, 0.25);
-  }
-  .fit-top { display: flex; align-items: center; justify-content: space-between; width: 100%; }
-  .fit-check {
-    width: 28px; height: 28px; border-radius: 8px; display: flex; align-items: center; justify-content: center;
-    background: rgba(148, 82, 255, 0.18); border: 1px solid rgba(181, 140, 255, 0.35); color: var(--accent);
-  }
-  .fit-card[aria-pressed="true"] .fit-check { background: var(--grad); color: #fff; }
-  .fit-solution {
-    max-width: 780px; margin: 24px auto 0; padding: 22px 26px;
-    display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;
-    border-color: rgba(181, 140, 255, 0.4);
-  }
-  .fit-solution p { color: var(--label); font-size: 15px; flex: 1; min-width: 240px; }
+  /* Preço */
+  .price-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; align-items: stretch; }
+  .price { padding: 38px; display: flex; flex-direction: column; justify-content: center; }
+  .price .amount { font-size: clamp(54px, 7vw, 76px); font-weight: 800; letter-spacing: -0.03em; line-height: 1; }
+  .price .amount small { font-size: 20px; font-weight: 600; color: var(--muted); letter-spacing: 0; }
+  .price ul { margin: 22px 0 28px; padding: 0; list-style: none; display: grid; gap: 10px; }
+  .price li { display: flex; gap: 10px; color: var(--fg); }
+  .price li::before { content: "✓"; color: var(--ok); font-weight: 800; }
+  .example { padding: 38px; }
+  .example h3 { margin-bottom: 18px; }
+  .ex-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid rgba(148,82,255,0.14); color: var(--muted); }
+  .ex-row:last-child { border-bottom: 0; }
+  .ex-row strong { color: var(--fg); }
+  .example .note { margin-top: 18px; font-size: 14px; color: #8f87a8; }
 
-  /* Depoimentos Interativos */
-  .testi-filters {
-    display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-bottom: 32px;
-  }
-  .filter-pill {
-    min-height: 40px; padding: 0 16px; border-radius: 999px; font: inherit; font-size: 13px; font-weight: 700;
-    border: 1px solid var(--input); background: rgba(255,255,255,.04); color: var(--muted); cursor: pointer;
-    transition: all .2s ease;
-  }
-  .filter-pill:hover { border-color: var(--accent); color: var(--fg); transform: translateY(-1px); }
-  .filter-pill[aria-pressed="true"] {
-    background: var(--grad); color: #fff; border-color: var(--accent); box-shadow: var(--glow);
-  }
-  .testi-grid {
-    display: grid; gap: 20px; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  }
-  .testi-card {
-    padding: 26px; display: flex; flex-direction: column; justify-content: space-between; gap: 20px;
-    transition: opacity .25s ease, transform .28s cubic-bezier(.22,1,.36,1), border-color .28s ease;
-  }
-  .testi-card.hidden-card { display: none; }
-  .testi-metric {
-    display: inline-flex; align-items: center; gap: 6px; align-self: flex-start;
-    padding: 5px 12px; border-radius: 999px; font-size: 12px; font-weight: 700;
-    background: rgba(52, 211, 153, 0.12); border: 1px solid rgba(52, 211, 153, 0.35); color: var(--success);
-  }
-  .testi-quote { font-size: 15.5px; color: var(--label); line-height: 1.55; }
-  .testi-author {
-    display: flex; align-items: center; gap: 12px; padding-top: 16px;
-    border-top: 1px solid rgba(148, 82, 255, 0.18);
-  }
-  .testi-avatar {
-    width: 42px; height: 42px; border-radius: 12px; background: var(--grad);
-    display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 15px; color: #fff;
-    flex: none;
-  }
-  .testi-info strong { display: block; font-size: 15px; color: var(--fg); }
-  .testi-info span { display: block; font-size: 13px; color: var(--muted); }
-  input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.12); }
-  .price-result {
-    text-align: center; padding: 24px; border-radius: 14px;
-    background: rgba(110, 34, 255, 0.1); border: 1px solid rgba(169, 122, 255, 0.28);
-    margin-bottom: 24px;
-  }
-  .price-result .amount { font-size: 54px; font-weight: 800; letter-spacing: -0.04em; line-height: 1.05; }
-  .price-result .amount small { font-size: 18px; font-weight: 500; color: var(--muted); letter-spacing: 0; }
-  .price-result .sub { margin-top: 6px; font-size: 14px; color: var(--muted); }
-  .price-box ul { margin-bottom: 28px; }
-
-  /* form */
-  .teste { background: none; }
-  .teste .wrap { max-width: 672px; }
-  form.lead { padding: 28px; display: grid; gap: 20px; }
-  @media (min-width: 640px) { form.lead { padding: 36px; } .fields { grid-template-columns: 1fr 1fr; } }
-  .fields { display: grid; gap: 20px; }
-  .field-group { display: grid; gap: 8px; }
-  .field-group label, .field-group legend { font-size: 14px; font-weight: 600; color: var(--label); }
+  /* Formulário */
+  .lead-wrap { display: grid; grid-template-columns: .85fr 1.15fr; gap: 56px; align-items: start; }
+  .lead { padding: 34px; }
+  .lead-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .field-group { display: flex; flex-direction: column; gap: 6px; }
+  .field-group.full { grid-column: 1 / -1; }
+  label, legend { font-size: 14px; font-weight: 600; color: #d4cfe4; }
   .field {
-    width: 100%; min-height: 48px; padding: 0 16px; border-radius: 12px; font: inherit; color: var(--fg);
-    background: rgba(255,255,255,.04); border: 1px solid var(--input); transition: border-color .2s, background .2s;
+    font: inherit; font-size: 16px; color: var(--fg); background: rgba(5,5,9,0.6);
+    border: 1px solid rgba(148,82,255,0.32); border-radius: 12px; padding: 12px 14px; min-height: 48px; width: 100%;
   }
-  .field::placeholder { color: #8f87aa; }
-  .field:hover, .field:focus { border-color: var(--accent); background: rgba(255,255,255,.06); outline: none; }
-  .field[aria-invalid="true"] { border-color: #ff9ad0; }
-  .err { font-size: 13px; color: #ff9ad0; min-height: 0; }
-  fieldset { border: 0; margin: 0; padding: 0; display: grid; gap: 12px; }
+  .field::placeholder { color: #6f6889; }
+  .field:focus { outline: 2px solid #9452ff; outline-offset: 1px; }
+  .field[aria-invalid="true"] { border-color: #f87171; }
+  .err { font-size: 13px; color: #fca5a5; min-height: 0; }
+  .err:empty { display: none; }
+  fieldset { border: 0; padding: 0; margin: 20px 0 0; }
+  legend { margin-bottom: 10px; }
   .chips { display: flex; flex-wrap: wrap; gap: 8px; }
   .chips button {
-    min-height: 44px; padding: 0 16px; border-radius: 999px; font: inherit; font-size: 14px; font-weight: 600;
-    border: 1px solid var(--input); background: rgba(255,255,255,.05); color: var(--label); cursor: pointer;
-    transition: all .2s;
+    font: inherit; font-size: 15px; font-weight: 600; color: var(--muted); cursor: pointer; min-height: 44px;
+    padding: 0 16px; border-radius: 12px; background: rgba(255,255,255,0.04); border: 1px solid rgba(148,82,255,0.28);
   }
-  .chips button:hover { border-color: var(--accent); }
-  .chips button[aria-checked="true"] { border-color: var(--accent); background: var(--grad); color: #fff; box-shadow: var(--glow); }
-  .form-note { text-align: center; font-size: 13px; color: var(--muted); }
-  .form-error { font-size: 14px; color: #ff9ad0; }
-  .success { padding: 40px; text-align: center; display: grid; justify-items: center; gap: 16px; }
-  .success svg { width: 48px; height: 48px; stroke: var(--success); fill: none; stroke-width: 2; }
-  .success p { font-size: 20px; font-weight: 700; }
-  .spinner { width: 16px; height: 16px; border: 2px solid rgba(255,255,255,.4); border-top-color: #fff; border-radius: 50%; animation: spin .8s linear infinite; }
+  .chips button[aria-checked="true"] { background: var(--grad); color: #fff; border-color: transparent; }
+  .consent { display: flex; gap: 10px; align-items: flex-start; font-size: 14px; color: var(--muted); margin-top: 20px; }
+  .consent input { margin-top: 3px; accent-color: #7f3dff; }
+  .consent a { color: var(--accent); }
+  .cf-turnstile { margin-top: 18px; }
+  .form-error { color: #fca5a5; font-size: 14px; margin-top: 12px; }
+  .form-note { font-size: 13px; color: #8f87a8; margin-top: 14px; }
+  .success { padding: 34px; text-align: center; display: grid; gap: 14px; justify-items: center; }
+  .success svg { width: 56px; height: 56px; fill: none; stroke: var(--ok); stroke-width: 1.6; }
+  .spinner { width: 16px; height: 16px; border-radius: 50%; border: 2px solid rgba(255,255,255,.4); border-top-color: #fff; display: inline-block; animation: spin .8s linear infinite; }
   @keyframes spin { to { transform: rotate(360deg); } }
+  .lead-copy ul { margin: 22px 0 0; padding: 0; list-style: none; display: grid; gap: 12px; color: var(--fg); }
+  .lead-copy li::before { content: "✓"; color: var(--ok); font-weight: 800; margin-right: 10px; }
 
-  /* faq */
-  details.faq { padding: 0 24px; margin-bottom: 12px; }
+  /* FAQ */
+  .faq-list { display: grid; gap: 12px; max-width: 820px; }
+  details.faq { padding: 0; }
   details.faq summary {
-    cursor: pointer; list-style: none; padding: 20px 0; font-weight: 600; font-size: 16px;
-    display: flex; justify-content: space-between; align-items: center; gap: 16px;
+    cursor: pointer; list-style: none; padding: 20px 56px 20px 24px; font-weight: 700; font-size: 17px; position: relative;
   }
   details.faq summary::-webkit-details-marker { display: none; }
-  details.faq summary::after { content: "+"; font-size: 22px; color: var(--accent); transition: transform .2s; }
+  details.faq summary::after {
+    content: "+"; position: absolute; right: 24px; top: 50%; transform: translateY(-50%); font-size: 24px; color: var(--accent);
+  }
   details.faq[open] summary::after { content: "–"; }
-  details.faq p { padding: 0 0 20px; color: var(--muted); }
+  details.faq p { padding: 0 24px 20px; }
 
-  .cta-final { text-align: center; padding: 64px 32px; max-width: 896px; margin: 0 auto; }
-  .cta-final h2 { font-size: clamp(30px, 5vw, 50px); }
-  .cta-final .ctas-end { margin-top: 32px; display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; }
+  /* CTA final */
+  .final { text-align: center; }
+  .final .wrap { max-width: 760px; }
+  .final p { margin: 18px auto 32px; font-size: 18px; max-width: 580px; }
 
-  footer { border-top: 1px solid var(--border); padding: 40px 20px; }
-  footer .wrap { display: flex; flex-direction: column; align-items: center; justify-content: space-between; gap: 16px; color: var(--muted); font-size: 14px; }
-  footer a:hover { color: var(--fg); }
-  @media (min-width: 768px) { footer .wrap { flex-direction: row; } }
-</style>
-<style>
-  .cookie-banner { position: fixed; left: 0; right: 0; bottom: 0; z-index: 60; padding: 16px 20px; background: #0d0a1a; border-top: 1px solid rgba(148,82,255,0.28); box-shadow: 0 -8px 30px rgba(0,0,0,0.45); color: #b8b0d0; font-size: 14px; line-height: 1.55; display: flex; flex-wrap: wrap; gap: 14px; align-items: center; justify-content: space-between; }
-  .cookie-banner .cb-text { display: flex; gap: 12px; align-items: flex-start; flex: 1 1 420px; min-width: 0; }
-  .cookie-banner .cb-icon { flex: 0 0 auto; width: 22px; height: 22px; margin-top: 1px; color: #bf9cff; }
-  .cookie-banner strong { color: #f8f7fc; display: block; margin-bottom: 2px; font-size: 15px; }
-  .cookie-banner a { color: #bf9cff; text-decoration: underline; text-underline-offset: 3px; }
-  .cookie-banner .cb-actions { display: flex; flex-wrap: wrap; gap: 8px; }
-  .cookie-banner button { border-radius: 10px; padding: 10px 18px; font: inherit; font-weight: 700; font-size: 14px; cursor: pointer; border: 1px solid rgba(148,82,255,0.45); background: transparent; color: #f8f7fc; transition: all .2s; }
-  .cookie-banner button:hover { background: rgba(255,255,255,0.06); }
-  .cookie-banner button.cb-accept { background: linear-gradient(135deg,#5a12f0,#6e22ff 60%,#9452ff); border-color: transparent; color: #fff; box-shadow: 0 0 14px rgba(127,61,255,0.30); }
-  .cookie-banner button.cb-accept:hover { filter: brightness(1.08); background: linear-gradient(135deg,#5a12f0,#6e22ff 60%,#9452ff); }
-  .cookie-banner button:focus-visible { outline: 2px solid #9452ff; outline-offset: 2px; }
+  footer { border-top: 1px solid rgba(148,82,255,0.14); padding: 32px 0; font-size: 14px; color: #8f87a8; }
+  footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px; }
+  footer a { color: var(--muted); }
+
+  /* Barra mobile */
+  .menu-btn { display: none; }
+
+  /* Cookies */
+  .cookie-banner {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 60; padding: 16px 20px; background: #0d0a1a;
+    border-top: 1px solid rgba(148,82,255,.3); display: flex; flex-wrap: wrap; gap: 14px; align-items: center; justify-content: space-between;
+  }
+  .cookie-banner p { font-size: 14px; max-width: 760px; }
+  .cookie-banner a { color: #bf9cff; }
+  .cookie-banner .cb-actions { display: flex; gap: 8px; }
+  .cookie-banner button { font: inherit; font-weight: 700; font-size: 14px; min-height: 42px; padding: 0 16px; border-radius: 12px; cursor: pointer; background: rgba(255,255,255,0.04); color: var(--fg); border: 1px solid rgba(148,82,255,0.32); }
+  .cookie-banner .cb-accept { background: var(--grad); color: #fff; border-color: transparent; }
   .cookie-banner[hidden] { display: none; }
-  @media (max-width: 600px) { .cookie-banner .cb-actions { width: 100%; } .cookie-banner .cb-actions button { flex: 1 1 0; } }
+
+  .reveal { opacity: 0; transform: translateY(14px); transition: opacity .6s ease, transform .6s ease; }
+  .reveal.in { opacity: 1; transform: none; }
+  @media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; transition: none; } html { scroll-behavior: auto; } }
+
+  /* Responsivo */
+  @media (max-width: 900px) {
+    section { padding: 72px 0; }
+    .hero-grid, .lead-wrap, .price-wrap, .two { grid-template-columns: 1fr; }
+    header nav.main { display: none; }
+    header .btn { margin-left: auto; }
+    .head { margin-bottom: 36px; }
+  }
+  @media (max-width: 560px) {
+    .lead-grid { grid-template-columns: 1fr; }
+    .lead, .price, .example, .success { padding: 24px; }
+    .hero { padding-top: 48px; }
+    .hero .sub { font-size: 17px; }
+    .btn-hero { width: 100%; }
+    header .btn { display: none; }
+    .actions .btn { width: 100%; }
+    .cookie-banner .cb-actions { width: 100%; }
+    .cookie-banner .cb-actions button { flex: 1; }
+  }
 </style>
 </head>
-<body>
+<body id="topo">
 
 <header class="top">
   <div class="wrap">
     <a class="logo" href="#topo" aria-label="Meu Marketing — início">
-      <img src="assets/logo-mark.png" width="52" height="52" alt="Meu Marketing" style="display:block">
+      <img src="assets/logo-mark.png" width="36" height="36" alt="">
+      <span>Meu Marketing</span>
     </a>
     <nav class="main" aria-label="Principal">
       <a href="#como-funciona">Como funciona</a>
-      <a href="#para-quem-e">Para quem é</a>
-      <a href="#preco">Simulador</a>
+      <a href="#recursos">Recursos</a>
+      <a href="#preco">Preço</a>
       <a href="#duvidas">Dúvidas</a>
     </nav>
-    <a class="btn btn-primary btn-nav" href="#teste">Testar grátis</a>
-    <button class="menu-btn" id="menuBtn" aria-label="Abrir menu" aria-expanded="false" aria-controls="mobileNav">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
-    </button>
-  </div>
-  <nav class="mobile-nav" id="mobileNav" aria-label="Menu móvel">
-    <a href="#como-funciona">Como funciona</a>
-    <a href="#para-quem-e">Para quem é</a>
-    <a href="#preco">Simulador</a>
-    <a href="#duvidas">Dúvidas</a>
     <a class="btn btn-primary" href="#teste">Testar grátis</a>
-  </nav>
+  </div>
 </header>
 
 <main>
-  <!-- HERO -->
-  <section class="hero ambient" id="topo">
-    <div class="wrap hero-grid">
-      <div class="reveal in">
-        <p class="pill"><span class="dot"></span> Para agências de marketing digital · Fora do WhatsApp</p>
-        <h1>Aprovações, contratos e clientes. <span class="text-gradient">Fora do WhatsApp.</span></h1>
-        <p class="lead">O Meu Marketing é o aplicativo onde sua equipe envia os conteúdos, o cliente aprova em um toque e a agência sabe exatamente quantas publicações do contrato já foram entregues.</p>
-        <div class="ctas">
-          <a class="btn btn-primary" href="#teste">Quero testar 14 dias grátis →</a>
-          <a class="btn btn-secondary" href="#preco">Simular meu plano</a>
-        </div>
-        <p class="small">Acesso pelo navegador e pelo celular · Painel da agência e painel do cliente</p>
+
+<!-- HERO -->
+<section class="hero" aria-labelledby="h-hero">
+  <div class="wrap hero-grid">
+    <div class="reveal in">
+      <span class="badge">Para agências de marketing digital</span>
+      <h1 id="h-hero">Aprovações, contratos e clientes. <span class="text-gradient">Fora do WhatsApp.</span></h1>
+      <p class="sub">Sua equipe prepara o conteúdo, você revisa e o cliente aprova em um toque. Histórico de versões e saldo de publicações do contrato, tudo no mesmo lugar.</p>
+      <div class="actions">
+        <a class="btn btn-primary btn-hero" href="#teste">Quero testar 14 dias grátis →</a>
+        <a class="btn btn-ghost btn-hero" href="#como-funciona">Ver como funciona</a>
       </div>
+      <p class="micro">Sem cobrança durante o teste.</p>
+    </div>
 
-      <!-- MOCKUP INTERATIVO COM SELETOR DE MODO -->
-      <div class="mock reveal in" aria-label="Demonstração interativa do aplicativo">
-        <div class="mock-top-bar">
-          <span class="mock-badge">⚡ Teste o fluxo ao vivo</span>
-          <div class="mock-mode-switch" role="group" aria-label="Alternar visão do mockup">
-            <button type="button" class="mock-mode-btn" id="modeClienteBtn" aria-pressed="true">Visão do Cliente</button>
-            <button type="button" class="mock-mode-btn" id="modeGestorBtn" aria-pressed="false">Visão do Gestor</button>
-          </div>
-        </div>
-
-        <div class="glass main-card">
-          <div class="row">
-            <b id="mockTitle">Campanha de novembro</b>
-            <span class="chip" id="mockStatus">Aguardando aprovação</span>
-          </div>
-          <div class="media">
-            <span class="mock-art-tag" id="mockVersion">Versão 2 · Carrossel (4 lâminas)</span>
-            <div class="mock-art-copy">
-              <strong id="mockArtHeadline">Black Week Exclusiva</strong>
-              <span id="mockArtSub">Arte revisada pelo gestor · Pronta para feed</span>
-            </div>
-          </div>
-          <div class="mock-caption-box">
-            <div class="mock-caption-meta">
-              <span id="mockMetaLeft">Legenda sugerida</span>
-              <span id="mockMetaRight">Instagram / Facebook</span>
-            </div>
-            <p id="mockCaption">Garanta condições especiais nesta semana. Clique no link da bio e fale com nossa equipe.</p>
-          </div>
-          <div class="btns" id="mockBtns">
-            <button type="button" class="btn btn-primary" id="btnPrimaryMock">✓ Aprovar post</button>
-            <button type="button" class="btn btn-secondary" id="btnSecondaryMock">Pedir ajuste</button>
-          </div>
-          <div class="mock-feedback" id="mockFeedback" hidden>
-            <span id="mockFeedbackText"></span>
-            <button type="button" class="mock-reset" id="btnResetMock">Simular de novo</button>
-          </div>
-        </div>
-
-        <div class="glass counter">
-          <div class="row">
-            <p>Publicações do contrato</p>
-            <p id="mockCounterText">6 de 10 entregues (4 restantes)</p>
-          </div>
-          <div class="bar-track" role="progressbar" id="mockProgressBar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" aria-label="Publicações entregues">
-            <div class="bar-fill" id="mockBarFill" style="width: 60%"></div>
-          </div>
+    <!-- Mock ilustrativo do produto -->
+    <div class="glass mock reveal in" role="img" aria-label="Exemplo ilustrativo: publicação aguardando aprovação do cliente e contador de publicações restantes">
+      <div class="mock-top">
+        <small>Exemplo ilustrativo</small>
+        <span class="pill">Aguardando aprovação</span>
+      </div>
+      <div class="mock-post">
+        <strong>Carrossel: 5 erros que queimam seu orçamento</strong>
+        <p>Versão 2 · ajustada após o pedido de ajuste do cliente</p>
+        <div class="mock-actions">
+          <span class="ok">Aprovar</span>
+          <span class="adj">Pedir ajuste</span>
         </div>
       </div>
+      <div class="meter">
+        <div class="meter-row"><span>Publicações do contrato</span><span>5 de 8 restantes</span></div>
+        <div class="bar"><i></i></div>
+      </div>
+      <p class="mock-note">Os dados acima são de demonstração.</p>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- DORES -->
-  <section>
-    <div class="wrap">
-      <div class="head reveal">
-        <p class="eyebrow">O problema</p>
-        <h2>O WhatsApp não foi feito para <span class="text-gradient">aprovar conteúdo</span></h2>
-      </div>
-      <div class="grid g4">
-        <article class="glass interactive-card card reveal">
-          <div class="icon-tile"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><path d="M4 4l16 16"/></svg></div>
-          <h3>Aprovação perdida no grupo</h3>
-          <p class="muted">O “pode postar” some entre áudios e figurinhas, e ninguém sabe qual versão foi aprovada.</p>
-        </article>
-        <article class="glass interactive-card card reveal">
-          <div class="icon-tile"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16v16H4z"/><path d="M8 9h8M8 13h8M8 17h5"/></svg></div>
-          <h3>Post extra sem cobrar</h3>
-          <p class="muted">Sem contar as entregas, a agência publica além do contrato e não percebe a tempo de cobrar.</p>
-        </article>
-        <article class="glass interactive-card card reveal">
-          <div class="icon-tile"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5M12 7v5l3 2"/></svg></div>
-          <h3>Ajuste sem histórico</h3>
-          <p class="muted">Cada pedido de alteração vira uma conversa nova, sem registro do que mudou entre as versões.</p>
-        </article>
-        <article class="glass interactive-card card reveal">
-          <div class="icon-tile"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10" cy="8" r="4"/><path d="M2 21a8 8 0 0 1 16 0M19 8v6M16 11h6"/></svg></div>
-          <h3>Gestor como gargalo</h3>
-          <p class="muted">Tudo passa pelo celular do gestor, que vira o único elo entre equipe e cliente.</p>
-        </article>
-      </div>
+<!-- DOR -->
+<section aria-labelledby="h-dor">
+  <div class="wrap">
+    <div class="head reveal">
+      <p class="eyebrow">O problema</p>
+      <h2 id="h-dor">O WhatsApp não foi feito para <span class="text-gradient">aprovar conteúdo</span></h2>
+      <p>Quando a aprovação vive em grupos e áudios, algo sempre se perde. E quem paga a conta é a agência.</p>
     </div>
-  </section>
-
-  <!-- PARA QUEM É (INSPIRADO NO BLOCO RIGHT FIT) -->
-  <section class="ambient" id="para-quem-e">
-    <div class="wrap reveal">
-      <div class="head">
-        <p class="eyebrow">Para quem é</p>
-        <h2>O Meu Marketing é <span class="text-gradient">para sua agência se...</span></h2>
-        <p>Clique no cenário que mais parece com a sua operação hoje:</p>
-      </div>
-
-      <div class="fit-grid" id="fitGrid">
-        <button type="button" class="glass interactive-card fit-card" aria-pressed="true" data-solution="Centralize todas as entregas em links exclusivos por cliente. O histórico fica salvo com data, hora e versão aprovada — sem rolar conversa no WhatsApp.">
-          <div class="fit-top">
-            <span class="eyebrow" style="margin:0">Perfil 01</span>
-            <span class="fit-check">✓</span>
-          </div>
-          <h3>Atende de 5 a 40 clientes recorrentes</h3>
-          <p class="muted">E sente que os grupos de WhatsApp viraram uma bagunça impossível de auditar.</p>
-        </button>
-
-        <button type="button" class="glass interactive-card fit-card" aria-pressed="false" data-solution="O contador automático avisa quando o pacote mensal está acabando e sinaliza posts extras para você faturar sem constrangimento.">
-          <div class="fit-top">
-            <span class="eyebrow" style="margin:0">Perfil 02</span>
-            <span class="fit-check">✓</span>
-          </div>
-          <h3>Entrega posts extras sem perceber</h3>
-          <p class="muted">A equipe vai produzindo sob demanda e no fim do mês ninguém sabe quantos posts foram feitos.</p>
-        </button>
-
-        <button type="button" class="glass interactive-card fit-card" aria-pressed="false" data-solution="O designer sobe a arte no painel, você revisa com um clique e só então o cliente recebe a notificação para aprovar.">
-          <div class="fit-top">
-            <span class="eyebrow" style="margin:0">Perfil 03</span>
-            <span class="fit-check">✓</span>
-          </div>
-          <h3>Tem designer ou social media na equipe</h3>
-          <p class="muted">Mas tudo ainda precisa passar pelo seu celular antes de chegar ao cliente final.</p>
-        </button>
-
-        <button type="button" class="glass interactive-card fit-card" aria-pressed="false" data-solution="Seu cliente acessa um painel limpo com a marca e organização de uma grande operação, elevando a percepção de valor do seu fee.">
-          <div class="fit-top">
-            <span class="eyebrow" style="margin:0">Perfil 04</span>
-            <span class="fit-check">✓</span>
-          </div>
-          <h3>Quer profissionalizar a entrega</h3>
-          <p class="muted">E mostrar ao cliente um portal próprio de aprovação e acompanhamento de contrato.</p>
-        </button>
-      </div>
-
-      <div class="glass fit-solution" id="fitSolutionBox" role="status">
-        <p id="fitSolutionText">Centralize todas as entregas em links exclusivos por cliente. O histórico fica salvo com data, hora e versão aprovada — sem rolar conversa no WhatsApp.</p>
-        <a class="btn btn-primary btn-nav" href="#teste">Testar na minha agência →</a>
-      </div>
+    <div class="pain-grid">
+      <div class="glass card pain reveal"><h3>Aprovação perdida no grupo</h3><p>A mensagem do cliente some no meio de 300 outras. Você descobre quando o prazo já venceu.</p></div>
+      <div class="glass card pain reveal"><h3>Post extra sem cobrar</h3><p>O cliente pede “só mais um”. Sem contador, ninguém percebe que o contrato estourou.</p></div>
+      <div class="glass card pain reveal"><h3>Ajuste sem histórico</h3><p>Qual versão o cliente aprovou? Sem registro, a discussão recomeça do zero.</p></div>
+      <div class="glass card pain reveal"><h3>Gestor como gargalo</h3><p>Toda decisão passa por você, mesmo as pequenas. Sua equipe espera e o prazo corre.</p></div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- COMO FUNCIONA -->
-  <section id="como-funciona">
-    <div class="wrap">
-      <div class="head reveal">
-        <p class="eyebrow">Como funciona</p>
-        <h2>Do rascunho à publicação em 4 passos</h2>
-      </div>
-      <ol class="grid g4" style="padding:0;margin:0;list-style:none">
-        <li class="glass interactive-card card step reveal"><span class="text-gradient">01</span><h3>Equipe prepara</h3><p>A equipe sobe a arte e a legenda do conteúdo no app.</p></li>
-        <li class="glass interactive-card card step reveal"><span class="text-gradient">02</span><h3>Gestor revisa</h3><p>Só a versão liberada pelo gestor chega ao cliente.</p></li>
-        <li class="glass interactive-card card step reveal"><span class="text-gradient">03</span><h3>Cliente decide</h3><p>O cliente aprova ou pede ajuste, com histórico de versões.</p></li>
-        <li class="glass interactive-card card step reveal"><span class="text-gradient">04</span><h3>Contrato atualiza</h3><p>Na aprovação final, o saldo de publicações do contrato é atualizado.</p></li>
-      </ol>
+<!-- COMO FUNCIONA -->
+<section id="como-funciona" aria-labelledby="h-como">
+  <div class="wrap">
+    <div class="head reveal">
+      <p class="eyebrow">Como funciona</p>
+      <h2 id="h-como">Do rascunho à aprovação em <span class="text-gradient">4 passos</span></h2>
+      <p>O mesmo fluxo para a equipe, para você e para o cliente. Só a versão liberada pelo gestor chega ao cliente.</p>
     </div>
-  </section>
+    <ol class="steps">
+      <li class="glass step reveal"><span class="n">Passo 1</span><h3>Equipe prepara</h3><p>Arte e legenda sobem para o app, sem depender de arquivo solto no grupo.</p></li>
+      <li class="glass step reveal"><span class="n">Passo 2</span><h3>Gestor revisa</h3><p>Você libera a versão certa. Nada sai para o cliente antes da sua aprovação interna.</p></li>
+      <li class="glass step reveal"><span class="n">Passo 3</span><h3>Cliente decide</h3><p>Ele aprova ou pede ajuste em um toque. Cada versão fica registrada.</p></li>
+      <li class="glass step reveal"><span class="n">Passo 4</span><h3>Contrato atualiza</h3><p>Na aprovação final, o saldo de publicações do contrato é atualizado sozinho.</p></li>
+    </ol>
+  </div>
+</section>
 
-  <!-- RECURSOS -->
-  <section id="recursos">
-    <div class="wrap">
-      <div class="head reveal">
-        <p class="eyebrow">Recursos</p>
-        <h2>Tudo que a agência precisa, <span class="text-gradient">em um só lugar</span></h2>
-      </div>
-      <div class="grid g3">
-        <article class="glass interactive-card card reveal">
-          <div class="icon-tile"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 15l5-5 4 4 3-3 6 6"/></svg></div>
-          <h3>Aprovação dentro do app</h3>
-          <p class="muted">Carrossel, imagem e vídeo aprovados no próprio aplicativo.</p>
-        </article>
-        <article class="glass interactive-card card reveal">
-          <div class="icon-tile"><svg viewBox="0 0 24 24"><path d="M4 9h16M4 15h16M10 3l-2 18M16 3l-2 18"/></svg></div>
-          <h3>Contador de publicações</h3>
-          <p class="muted">Contratadas, aprovadas e restantes, sempre à vista.</p>
-        </article>
-        <article class="glass interactive-card card reveal">
-          <div class="icon-tile"><svg viewBox="0 0 24 24"><path d="M6 3h9l4 4v14H6z"/><path d="M9 12h6M9 16h6"/></svg></div>
-          <h3>Contratos e serviços adicionais</h3>
-          <p class="muted">Registre o escopo de cada cliente e os extras contratados.</p>
-        </article>
-        <article class="glass interactive-card card reveal">
-          <div class="icon-tile"><svg viewBox="0 0 24 24"><path d="M3 13l3-8h12l3 8v6H3z"/><path d="M3 13h5l1 2h6l1-2h5"/></svg></div>
-          <h3>Solicitações do cliente</h3>
-          <p class="muted">Pedidos chegam organizados, sem se perder em mensagens.</p>
-        </article>
-        <article class="glass interactive-card card reveal">
-          <div class="icon-tile"><svg viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 8 3 8H3s3-1 3-8M10 20a2 2 0 0 0 4 0"/></svg></div>
-          <h3>Lembretes de tráfego e vencimento</h3>
-          <p class="muted">Avisos de recarga de tráfego e de vencimento de contrato.</p>
-        </article>
-        <article class="glass interactive-card card reveal">
-          <div class="icon-tile"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="4"/><path d="M2 21a7 7 0 0 1 14 0M17 11a3 3 0 1 0 0-6M22 21a6 6 0 0 0-4-5.6"/></svg></div>
-          <h3>Equipe com perfis e permissões</h3>
-          <p class="muted">Cada pessoa vê o que precisa, com dados isolados por agência.</p>
-        </article>
-      </div>
+<!-- RECURSOS -->
+<section id="recursos" aria-labelledby="h-rec">
+  <div class="wrap">
+    <div class="head reveal">
+      <p class="eyebrow">Recursos</p>
+      <h2 id="h-rec">Tudo o que a agência precisa, <span class="text-gradient">em um só lugar</span></h2>
     </div>
-  </section>
+    <div class="feat-grid">
+      <article class="glass card feat reveal">
+        <div class="feat-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12l4 4 10-10"/></svg></div>
+        <h3>Aprovação no próprio app</h3><p>O cliente decide sem sair da plataforma. Você vê o status de cada peça na hora.</p>
+      </article>
+      <article class="glass card feat reveal">
+        <div class="feat-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/></svg></div>
+        <h3>Controle de publicações</h3><p>Contratadas, aprovadas e restantes, sempre à vista. Acabou o “só mais um” sem cobrança.</p>
+      </article>
+      <article class="glass card feat reveal">
+        <div class="feat-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 3h9l3 3v15H6z"/><path d="M9 12h6M9 16h4"/></svg></div>
+        <h3>Contratos e serviços extras</h3><p>Plano, vencimento e serviços adicionais com valor, tudo ligado ao cliente.</p>
+      </article>
+      <article class="glass card feat reveal">
+        <div class="feat-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 5h16v11H8l-4 4z"/></svg></div>
+        <h3>Pedidos e comentários</h3><p>Cada solicitação fica na demanda certa, com histórico. Nada se perde em outro grupo.</p>
+      </article>
+      <article class="glass card feat reveal">
+        <div class="feat-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 4a8 8 0 0 0-8 8v4l-1 2h18l-1-2v-4a8 8 0 0 0-8-8z"/></svg></div>
+        <h3>Lembretes automáticos</h3><p>Avisos de conteúdo pendente, vencimento de contrato e saldo de tráfego.</p>
+      </article>
+      <article class="glass card feat reveal">
+        <div class="feat-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"/><circle cx="17" cy="9" r="2"/><path d="M3 19c0-3 3-5 6-5s6 2 6 5M15 15c2.5 0 5 1.5 5 4"/></svg></div>
+        <h3>Equipe com permissões</h3><p>Cada funcionário tem conta própria e vê só os clientes da sua agência.</p>
+      </article>
+    </div>
+  </div>
+</section>
 
-  <!-- TABS INTERATIVAS: AGÊNCIA x CLIENTE -->
-  <section id="visao">
-    <div class="wrap tabs-wrap reveal">
-      <div class="head" style="margin-bottom: 28px;">
-        <p class="eyebrow">Dois painéis conectados</p>
-        <h2>Escolha a visão para explorar</h2>
-      </div>
-
-      <div class="tab-bar" role="tablist" aria-label="Alternar visão">
-        <button class="tab-btn" role="tab" id="tab-agencia" aria-selected="true" aria-controls="panel-agencia">Painel da Agência</button>
-        <button class="tab-btn" role="tab" id="tab-cliente" aria-selected="false" aria-controls="panel-cliente">Painel do Cliente</button>
-      </div>
-
-      <div class="glass tab-panel" role="tabpanel" id="panel-agencia" aria-labelledby="tab-agencia">
-        <p class="eyebrow">Para a agência</p>
-        <h3 style="font-size:28px;margin-bottom:24px">Menos cobrança, mais controle operacional</h3>
-        <ul class="check">
-          <li><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>Aprovações registradas formalmente, com data, hora e versão</li>
-          <li><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>Saldo de publicações do contrato sempre atualizado</li>
-          <li><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>Posts extras identificados automaticamente para cobrança</li>
-          <li><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>Equipe produzindo e enviando sem depender do WhatsApp do gestor</li>
+<!-- AGÊNCIA x CLIENTE -->
+<section aria-labelledby="h-ac">
+  <div class="wrap">
+    <div class="head reveal">
+      <p class="eyebrow">Dos dois lados</p>
+      <h2 id="h-ac">Melhor para a agência. <span class="text-gradient">Melhor para o cliente.</span></h2>
+    </div>
+    <div class="two">
+      <div class="glass card reveal">
+        <h3>Para a agência</h3>
+        <ul>
+          <li>Menos mensagens perdidas e menos retrabalho</li>
+          <li>Saldo de publicações sempre atualizado</li>
+          <li>Gestor libera, a equipe executa sem gargalo</li>
+          <li>Histórico de cada decisão para consultar depois</li>
         </ul>
       </div>
-
-      <div class="glass tab-panel" role="tabpanel" id="panel-cliente" aria-labelledby="tab-cliente" hidden>
-        <p class="eyebrow">Para o seu cliente</p>
-        <h3 style="font-size:28px;margin-bottom:24px">Uma experiência de agência grande no celular</h3>
-        <ul class="check">
-          <li><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>Aprova artes, carrosséis e vídeos em um toque, direto do celular</li>
-          <li><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>Visualiza o histórico completo de alterações de cada conteúdo</li>
-          <li><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>Envia novas solicitações e briefings em um canal organizado</li>
-          <li><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>Acompanha com transparência o que já foi entregue no mês</li>
+      <div class="glass card reveal">
+        <h3>Para o cliente</h3>
+        <ul>
+          <li>Vê o contrato, os serviços e o que ainda pode aprovar</li>
+          <li>Aprova ou pede ajuste sem procurar a mensagem certa</li>
+          <li>Acompanha o progresso das publicações</li>
+          <li>Recebe aviso quando há conteúdo para decidir</li>
         </ul>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <section class="ambient" id="preco">
-    <div class="wrap reveal">
-      <div class="head">
-        <p class="eyebrow">Preço transparente</p>
-        <h2>Pague só pelos <span class="text-gradient">clientes ativos</span></h2>
-        <p>Arraste para simular o valor mensal da sua agência após os 14 dias grátis.</p>
-      </div>
+<!-- SEGURANÇA (no lugar de prova social) -->
+<section aria-labelledby="h-seg">
+  <div class="wrap">
+    <div class="head reveal">
+      <p class="eyebrow">Segurança</p>
+      <h2 id="h-seg">Os dados de cada agência ficam <span class="text-gradient">separados</span></h2>
+      <p>Seus clientes confiam em você. A plataforma foi feita para proteger essa confiança.</p>
+    </div>
+    <div class="trust">
+      <div class="glass card reveal"><h3>Isolamento por agência</h3><p>Uma agência nunca acessa clientes, arquivos ou contratos de outra.</p></div>
+      <div class="glass card reveal"><h3>Cliente vê só a própria empresa</h3><p>Mesmo alterando identificadores na requisição, o cliente não acessa outros dados.</p></div>
+      <div class="glass card reveal"><h3>Acesso protegido</h3><p>Senhas protegidas por hash, sessões com expiração e confirmação de senha em ações sensíveis do gestor.</p></div>
+    </div>
+  </div>
+</section>
 
-      <div class="glass price-box">
-        <div class="slider-head">
-          <label for="clientSlider">Clientes ativos na agência:</label>
-          <span class="slider-count" id="sliderCountText">8 clientes</span>
-        </div>
-        <input type="range" id="clientSlider" min="1" max="50" value="8">
-
-        <div class="price-result">
-          <p class="amount" id="priceTotal">R$ 160 <small>/ mês</small></p>
-          <p class="sub">R$ 20 por cliente ativo/mês · Mínimo de R$ 20/mês · Clientes arquivados não entram na conta</p>
-        </div>
-
-        <ul class="check">
-          <li><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>14 dias grátis para testar sem compromisso</li>
-          <li><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>Painel da agência e painel do cliente incluídos</li>
-          <li><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></svg>Usuários da agência e de clientes ilimitados</li>
+<!-- PREÇO -->
+<section id="preco" aria-labelledby="h-preco">
+  <div class="wrap">
+    <div class="head reveal">
+      <p class="eyebrow">Preço</p>
+      <h2 id="h-preco">Pague só pelos <span class="text-gradient">clientes ativos</span></h2>
+      <p>Sem cobrança por funcionário ou login de cliente. Você paga pelos clientes ativos.</p>
+    </div>
+    <div class="price-wrap">
+      <div class="glass price reveal">
+        <div class="amount">R$ 20 <small>por cliente ativo/mês</small></div>
+        <ul>
+          <li>Funcionários e logins sem custo extra</li>
+          <li>Aprovações, contratos e publicações</li>
+          <li>Teste grátis de 14 dias</li>
+          <li>Pagamento mensal por Pix ou cartão</li>
         </ul>
-        <a class="btn btn-primary btn-block" href="#teste" id="ctaFromSim">Começar teste de 14 dias →</a>
+        <a class="btn btn-primary btn-block" href="#teste">Quero testar 14 dias grátis →</a>
+      </div>
+      <div class="glass example reveal">
+        <h3>Exemplo</h3>
+        <div class="ex-row"><span>Clientes ativos</span><strong>5</strong></div>
+        <div class="ex-row"><span>Valor por cliente</span><strong>R$ 20</strong></div>
+        <div class="ex-row"><span>Total mensal</span><strong>R$ 100</strong></div>
+        <p class="note">Sem cobrança extra por funcionário ou login de cliente.</p>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- FORMULÁRIO -->
-  <section class="teste ambient" id="teste">
-    <div class="wrap reveal">
-      <div class="head">
-        <p class="eyebrow">Comece agora</p>
-        <h2>Teste grátis por <span class="text-gradient">14 dias</span></h2>
-        <p>Preencha os dados e informe seu cartão no cadastro. Seu teste de 14 dias começa agora e a cobrança só inicia depois do período.</p>
-      </div>
+<!-- FORMULÁRIO -->
+<section class="final" id="teste" aria-labelledby="h-teste" style="padding-top:72px">
+  <div class="wrap lead-wrap" style="text-align:left">
+    <div class="lead-copy reveal">
+      <p class="eyebrow">Comece agora</p>
+      <h2 id="h-teste">Teste grátis por <span class="text-gradient">14 dias</span></h2>
+      <p style="margin-top:16px;font-size:18px">Preencha os dados e a gente libera seu acesso ao cadastro do app.</p>
+      <ul>
+        <li>Sem cobrança durante o teste</li>
+        <li>Equipe e clientes entram no mesmo app</li>
+        <li>Pague só depois do período de teste</li>
+      </ul>
+    </div>
 
-      <div id="formWrap">
-        <form class="glass lead" id="leadForm" novalidate>
-          <input type="text" name="website" id="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">
-          <div class="fields">
-            <div class="field-group">
-              <label for="nome">Seu nome</label>
-              <input class="field" id="nome" name="nome" type="text" autocomplete="name" placeholder="Como podemos te chamar" required aria-describedby="nome-err">
-              <p class="err" id="nome-err" role="alert"></p>
-            </div>
-            <div class="field-group">
-              <label for="agencia">Nome da agência</label>
-              <input class="field" id="agencia" name="agencia" type="text" autocomplete="organization" placeholder="Sua agência" required aria-describedby="agencia-err">
-              <p class="err" id="agencia-err" role="alert"></p>
-            </div>
-            <div class="field-group">
-              <label for="whatsapp">WhatsApp</label>
-              <input class="field" id="whatsapp" name="whatsapp" type="tel" inputmode="numeric" autocomplete="tel" placeholder="(00) 00000-0000" required aria-describedby="whatsapp-err">
-              <p class="err" id="whatsapp-err" role="alert"></p>
-            </div>
-            <div class="field-group">
-              <label for="email">E-mail</label>
-              <input class="field" id="email" name="email" type="email" autocomplete="email" placeholder="voce@agencia.com.br" required aria-describedby="email-err">
-              <p class="err" id="email-err" role="alert"></p>
-            </div>
-          </div>
-
-          <fieldset>
-            <legend>Quantos clientes a agência atende hoje?</legend>
-            <div class="chips" role="radiogroup" id="faixas">
-              <button type="button" role="radio" aria-checked="false" data-v="1 a 5">1 a 5</button>
-              <button type="button" role="radio" aria-checked="false" data-v="6 a 15">6 a 15</button>
-              <button type="button" role="radio" aria-checked="false" data-v="16 a 30">16 a 30</button>
-              <button type="button" role="radio" aria-checked="false" data-v="Mais de 30">Mais de 30</button>
-            </div>
-            <p class="err" id="faixa-err" role="alert"></p>
-          </fieldset>
-
+    <div id="formWrap" class="reveal">
+      <form class="glass lead" id="leadForm" novalidate>
+        <input type="text" name="website" id="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">
+        <div class="lead-grid">
           <div class="field-group">
-            <label style="display:flex;gap:10px;align-items:flex-start;font-weight:500;font-size:14px;color:var(--muted)">
-              <input type="checkbox" id="consent" name="consent" style="margin-top:3px;accent-color:#7f3dff"> <span>Li e aceito a <a href="privacidade.html" target="_blank" rel="noopener" style="color:var(--accent)">Política de Privacidade</a> e autorizo o uso dos meus dados para contato sobre o teste.</span>
-            </label>
-            <p class="err" id="consent-err" role="alert"></p>
+            <label for="nome">Seu nome</label>
+            <input class="field" id="nome" name="nome" type="text" autocomplete="name" placeholder="Como podemos te chamar" required aria-describedby="nome-err">
+            <p class="err" id="nome-err" role="alert"></p>
           </div>
-          <div class="cf-turnstile" data-sitekey="0x4AAAAAAGK3HbS0x5djP3K0" data-theme="dark"></div>
-          <p class="form-error" id="formError" role="alert" hidden></p>
-          <button class="btn btn-primary btn-block" type="submit" id="submitBtn">Quero meu teste grátis →</button>
-          <p class="form-note">Usamos seus dados só para liberar seu teste e falar com você sobre ele. Não cobramos antes do fim do período de 14 dias. Detalhes na Política de Privacidade.</p>
-        </form>
-      </div>
-    </div>
-  </section>
+          <div class="field-group">
+            <label for="agencia">Nome da agência</label>
+            <input class="field" id="agencia" name="agencia" type="text" autocomplete="organization" placeholder="Sua agência" required aria-describedby="agencia-err">
+            <p class="err" id="agencia-err" role="alert"></p>
+          </div>
+          <div class="field-group">
+            <label for="whatsapp">WhatsApp</label>
+            <input class="field" id="whatsapp" name="whatsapp" type="tel" inputmode="numeric" autocomplete="tel" placeholder="(00) 00000-0000" required aria-describedby="whatsapp-err">
+            <p class="err" id="whatsapp-err" role="alert"></p>
+          </div>
+          <div class="field-group">
+            <label for="email">E-mail</label>
+            <input class="field" id="email" name="email" type="email" autocomplete="email" placeholder="voce@agencia.com.br" required aria-describedby="email-err">
+            <p class="err" id="email-err" role="alert"></p>
+          </div>
+        </div>
 
-  <!-- FAQ -->
-  <section id="duvidas">
-    <div class="wrap reveal" style="max-width:768px">
-      <div class="head">
-        <p class="eyebrow">Dúvidas</p>
-        <h2>Perguntas frequentes</h2>
-      </div>
-      <details class="glass faq">
-        <summary>Funciona no celular?</summary>
-        <p>Sim. Funciona no computador e no celular, pelo navegador. Os aplicativos para Android e iOS ainda não estão disponíveis nas lojas.</p>
-      </details>
-      <details class="glass faq">
-        <summary>Meu cliente precisa aprender a usar?</summary>
-        <p>Não. O cliente recebe o conteúdo e escolhe entre aprovar ou pedir ajuste, em um toque.</p>
-      </details>
-      <details class="glass faq">
-        <summary>Um cliente pode ver dados de outro?</summary>
-        <p>Não. Os dados são isolados por agência e por empresa: cada cliente vê apenas o que é dele.</p>
-      </details>
-      <details class="glass faq">
-        <summary>E se o cliente não responder?</summary>
-        <p>O conteúdo fica pendente e o cliente recebe notificação. Se necessário, o gestor pode registrar a aprovação final.</p>
-      </details>
-      <details class="glass faq">
-        <summary>Como funciona a cobrança depois do teste?</summary>
-        <p>O cartão é cadastrado no início, mas a cobrança só começa depois dos 14 dias. Depois disso, a cobrança é mensal: R$ 20 por cliente ativo, com mínimo de R$ 20/mês. Clientes arquivados não entram na conta. Usuários da agência e de clientes são ilimitados.</p>
-      </details>
-    </div>
-  </section>
+        <fieldset>
+          <legend>Quantos clientes a agência atende hoje?</legend>
+          <div class="chips" role="radiogroup" id="faixas" aria-describedby="faixa-err">
+            <button type="button" role="radio" aria-checked="false" data-v="1 a 5">1 a 5</button>
+            <button type="button" role="radio" aria-checked="false" data-v="6 a 15">6 a 15</button>
+            <button type="button" role="radio" aria-checked="false" data-v="16 a 30">16 a 30</button>
+            <button type="button" role="radio" aria-checked="false" data-v="Mais de 30">Mais de 30</button>
+          </div>
+          <p class="err" id="faixa-err" role="alert"></p>
+        </fieldset>
 
-  <!-- CTA FINAL -->
-  <section style="padding-top:24px">
-    <div class="glass ambient cta-final reveal">
-      <h2>Sua agência, seus clientes <span class="text-gradient">em um só lugar.</span></h2>
-      <div class="ctas-end">
-        <a class="btn btn-primary" href="#teste">Quero testar 14 dias grátis →</a>
-        <a class="btn btn-secondary" href="#preco">Simular meu plano</a>
-      </div>
+        <div class="consent-wrap">
+          <label class="consent">
+            <input type="checkbox" id="consent" name="consent">
+            <span>Li e aceito a <a href="privacidade.html" target="_blank" rel="noopener">Política de Privacidade</a> e autorizo o uso dos meus dados para contato sobre o teste.</span>
+          </label>
+          <p class="err" id="consent-err" role="alert"></p>
+        </div>
+
+        <div class="cf-turnstile" data-sitekey="0x4AAAAAAGK3HbS0x5djP3K0" data-theme="dark"></div>
+        <p class="form-error" id="formError" role="alert" hidden></p>
+        <button class="btn btn-primary btn-block" type="submit" id="submitBtn" style="margin-top:18px">Quero meu teste grátis →</button>
+        <p class="form-note">Usamos seus dados só para liberar seu teste e falar com você sobre ele. Não cobramos durante os 14 dias. Detalhes na Política de Privacidade.</p>
+      </form>
     </div>
-  </section>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="duvidas" aria-labelledby="h-faq">
+  <div class="wrap">
+    <div class="head reveal">
+      <p class="eyebrow">Dúvidas</p>
+      <h2 id="h-faq">Perguntas frequentes</h2>
+    </div>
+    <div class="faq-list">
+      <details class="glass faq reveal"><summary>Funciona no celular?</summary><p>Sim. Funciona no navegador do celular e do computador, com a mesma tela e os mesmos dados.</p></details>
+      <details class="glass faq reveal"><summary>Meu cliente precisa aprender a usar?</summary><p>Não. Ele recebe o conteúdo, vê o que precisa decidir e aprova ou pede ajuste em um toque.</p></details>
+      <details class="glass faq reveal"><summary>Um cliente pode ver dados de outro?</summary><p>Não. Cada cliente vê apenas a própria empresa, e cada agência fica isolada das demais.</p></details>
+      <details class="glass faq reveal"><summary>E se o cliente não responder?</summary><p>Nada é aprovado automaticamente. A peça continua pendente, e você recebe aviso para cobrar a decisão.</p></details>
+      <details class="glass faq reveal"><summary>Como funciona a cobrança depois do teste?</summary><p>É mensal, por cliente ativo, a R$ 20 cada. Você recebe aviso 3 dias antes do vencimento. Pague por Pix ou cartão.</p></details>
+    </div>
+  </div>
+</section>
+
+<!-- CTA FINAL -->
+<section class="final" aria-labelledby="h-final" style="padding-top:24px">
+  <div class="wrap">
+    <h2 id="h-final">Sua agência, seus clientes <span class="text-gradient">em um só lugar.</span></h2>
+    <p>Teste por 14 dias, sem cobrança, e veja se a aprovação deixa de depender do WhatsApp.</p>
+    <a class="btn btn-primary" href="#teste">Quero testar 14 dias grátis →</a>
+  </div>
+</section>
+
 </main>
 
 <footer>
   <div class="wrap">
-    <a class="logo" href="#topo"><img src="assets/logo-mark.png" width="84" height="84" alt="Meu Marketing"></a>
-    <p>© 2026 Meu Marketing · meumarketing.app.br · <a href="mailto:contato@meumarketing.app.br">contato@meumarketing.app.br</a></p>
-    <p><a href="privacidade.html">Política de Privacidade</a> · Axioma Sistemas · CNPJ 46.695.457/0001-69</p>
-    <p>Desenvolvido por axioma.sistemas</p>
+    <span>© 2026 Meu Marketing · meumarketing.app.br</span>
+    <span><a href="privacidade.html">Política de Privacidade</a> · <a href="mailto:contato@meumarketing.app.br">contato@meumarketing.app.br</a></span>
   </div>
 </footer>
 
 <script>
-  /* ====== CONFIGURAÇÃO ======
-     Coloque aqui a URL do destino dos leads (ex.: endpoint do backend, Zapier/Make, Google Apps Script). */
-  /* Endpoint público do backend: https://<domínio-da-API>/leads (ex.: https://api.meumarketing.app.br/leads). */
+  /* ====== CONFIGURAÇÃO ====== */
   const LEAD_ENDPOINT = "https://script.google.com/macros/s/AKfycbw_IM2ddNIG5Lpd5ljPsyInKiyNzkOVdJPR1heTX1a2wORhM5tOQyS9PqX6qKtRYiDA/exec";
-  /* Link do cadastro do app (onde o cliente cria o primeiro acesso de teste). Preencher antes de publicar. */
   const APP_CADASTRO_URL = "https://meumarketing.app.br/login";
 
-  /* 0. Navegação suave garantida para todos os links âncora (funciona em iframes/previews) */
-  document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
-    anchor.addEventListener("click", (e) => {
-      const targetId = anchor.getAttribute("href");
-      if (!targetId || targetId === "#") return;
-      const targetEl = document.querySelector(targetId);
-      if (targetEl) {
-        e.preventDefault();
-        targetEl.scrollIntoView({ behavior: "smooth", block: "start" });
-      }
-    });
-  });
-
-  /* 1. Spotlight no mouse sobre os cards .glass */
-  document.querySelectorAll(".glass").forEach((card) => {
-    card.addEventListener("pointermove", (e) => {
-      const rect = card.getBoundingClientRect();
-      card.style.setProperty("--mx", `${e.clientX - rect.left}px`);
-      card.style.setProperty("--my", `${e.clientY - rect.top}px`);
-    });
-  });
-
-  /* 2. Animação de entrada ao rolar a página */
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add("in");
-        observer.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.1 });
-  document.querySelectorAll(".reveal").forEach((el) => observer.observe(el));
-
-  /* 3. Interatividade do Mockup no Hero (Modo Cliente x Modo Gestor) */
-  let mockMode = "cliente";
-  const modeClienteBtn = document.getElementById("modeClienteBtn");
-  const modeGestorBtn = document.getElementById("modeGestorBtn");
-  const mockStatus = document.getElementById("mockStatus");
-  const mockVersion = document.getElementById("mockVersion");
-  const mockArtHeadline = document.getElementById("mockArtHeadline");
-  const mockArtSub = document.getElementById("mockArtSub");
-  const mockMetaLeft = document.getElementById("mockMetaLeft");
-  const mockMetaRight = document.getElementById("mockMetaRight");
-  const mockCaption = document.getElementById("mockCaption");
-  const mockBtns = document.getElementById("mockBtns");
-  const btnPrimaryMock = document.getElementById("btnPrimaryMock");
-  const btnSecondaryMock = document.getElementById("btnSecondaryMock");
-  const mockFeedback = document.getElementById("mockFeedback");
-  const mockFeedbackText = document.getElementById("mockFeedbackText");
-  const mockCounterText = document.getElementById("mockCounterText");
-  const mockBarFill = document.getElementById("mockBarFill");
-  const mockProgressBar = document.getElementById("mockProgressBar");
-
-  function renderMockDefault() {
-    mockBtns.style.display = "grid";
-    mockFeedback.hidden = true;
-    mockCounterText.textContent = "6 de 10 entregues (4 restantes)";
-    mockBarFill.style.width = "60%";
-    mockProgressBar.setAttribute("aria-valuenow", "60");
-
-    if (mockMode === "cliente") {
-      mockStatus.textContent = "Aguardando aprovação";
-      mockStatus.className = "chip";
-      mockVersion.textContent = "Versão 2 · Carrossel (4 lâminas)";
-      mockArtHeadline.textContent = "Black Week Exclusiva";
-      mockArtSub.textContent = "Arte revisada pelo gestor · Pronta para feed";
-      mockMetaLeft.textContent = "Legenda sugerida";
-      mockMetaRight.textContent = "Instagram / Facebook";
-      mockCaption.textContent = "Garanta condições especiais nesta semana. Clique no link da bio e fale com nossa equipe.";
-      btnPrimaryMock.textContent = "✓ Aprovar post";
-      btnSecondaryMock.textContent = "Pedir ajuste";
-    } else {
-      mockStatus.textContent = "Revisão interna (Ana)";
-      mockStatus.className = "chip revision";
-      mockVersion.textContent = "Histórico: v1 → v2 pronta para envio";
-      mockArtHeadline.textContent = "Black Week Exclusiva";
-      mockArtSub.textContent = "Enviado pela equipe às 14:20 · Contrato ativo";
-      mockMetaLeft.textContent = "Controle interno da agência";
-      mockMetaRight.textContent = "Escopo: 10 posts/mês";
-      mockCaption.textContent = "Checklist interno concluído. Libere para o cliente aprovar ou registre como publicação extra do contrato.";
-      btnPrimaryMock.textContent = "Liberar p/ cliente →";
-      btnSecondaryMock.textContent = "+ Registrar extra";
-    }
+  /* Revelação suave ao rolar (desliga se o usuário preferir menos movimento) */
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if ("IntersectionObserver" in window && !reduceMotion) {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } });
+    }, { threshold: 0.12 });
+    document.querySelectorAll(".reveal:not(.in)").forEach((el) => io.observe(el));
+  } else {
+    document.querySelectorAll(".reveal").forEach((el) => el.classList.add("in"));
   }
 
-  modeClienteBtn.addEventListener("click", () => {
-    mockMode = "cliente";
-    modeClienteBtn.setAttribute("aria-pressed", "true");
-    modeGestorBtn.setAttribute("aria-pressed", "false");
-    renderMockDefault();
-  });
-
-  modeGestorBtn.addEventListener("click", () => {
-    mockMode = "gestor";
-    modeGestorBtn.setAttribute("aria-pressed", "true");
-    modeClienteBtn.setAttribute("aria-pressed", "false");
-    renderMockDefault();
-  });
-
-  btnPrimaryMock.addEventListener("click", () => {
-    mockBtns.style.display = "none";
-    mockFeedback.hidden = false;
-    if (mockMode === "cliente") {
-      mockStatus.textContent = "✓ Aprovado pelo cliente";
-      mockStatus.className = "chip approved";
-      mockFeedbackText.textContent = "Registrado! Saldo do contrato atualizado para 7/10.";
-      mockCounterText.textContent = "7 de 10 entregues (3 restantes)";
-      mockBarFill.style.width = "70%";
-      mockProgressBar.setAttribute("aria-valuenow", "70");
-    } else {
-      mockStatus.textContent = "✓ Liberado ao cliente";
-      mockStatus.className = "chip approved";
-      mockFeedbackText.textContent = "Cliente notificado! Aguardando aprovação em 1 toque.";
-    }
-  });
-
-  btnSecondaryMock.addEventListener("click", () => {
-    mockBtns.style.display = "none";
-    mockFeedback.hidden = false;
-    if (mockMode === "cliente") {
-      mockStatus.textContent = "Ajuste solicitado (v3)";
-      mockStatus.className = "chip revision";
-      mockVersion.textContent = "Versão 3 · Aguardando revisão da equipe";
-      mockFeedbackText.textContent = "Pedido enviado para a equipe com histórico salvo.";
-    } else {
-      mockStatus.textContent = "Post extra registrado";
-      mockStatus.className = "chip approved";
-      mockFeedbackText.textContent = "Adicionado ao relatório de cobrança extra do mês.";
-      mockCounterText.textContent = "7 de 10 entregues (+1 extra)";
-      mockBarFill.style.width = "70%";
-      mockProgressBar.setAttribute("aria-valuenow", "70");
-    }
-  });
-
-  document.getElementById("btnResetMock").addEventListener("click", renderMockDefault);
-
-  /* Interatividade da seção Para Quem É */
-  const fitCards = document.querySelectorAll(".fit-card");
-  const fitSolutionText = document.getElementById("fitSolutionText");
-  fitCards.forEach((card) => {
-    card.addEventListener("click", () => {
-      fitCards.forEach((c) => c.setAttribute("aria-pressed", String(c === card)));
-      fitSolutionText.textContent = card.dataset.solution;
-    });
-  });
-
-  /* Filtro interativo de Depoimentos */
-  const filterPills = document.querySelectorAll(".filter-pill");
-  const testiCards = document.querySelectorAll(".testi-card");
-  filterPills.forEach((pill) => {
-    pill.addEventListener("click", () => {
-      const selected = pill.dataset.filter;
-      filterPills.forEach((p) => p.setAttribute("aria-pressed", String(p === pill)));
-      testiCards.forEach((card) => {
-        const match = selected === "todos" || card.dataset.category === selected;
-        card.classList.toggle("hidden-card", !match);
-      });
-    });
-  });
-
-  /* 4. Tabs Agência x Cliente */
-  const tabBtns = document.querySelectorAll(".tab-btn");
-  const tabPanels = document.querySelectorAll(".tab-panel");
-  tabBtns.forEach((btn) => {
-    btn.addEventListener("click", () => {
-      tabBtns.forEach((b) => b.setAttribute("aria-selected", String(b === btn)));
-      tabPanels.forEach((panel) => {
-        panel.hidden = panel.id !== btn.getAttribute("aria-controls");
-      });
-    });
-  });
-
-  /* 5. Simulador de Preço sincronizado com o formulário */
-  const clientSlider = document.getElementById("clientSlider");
-  const sliderCountText = document.getElementById("sliderCountText");
-  const priceTotal = document.getElementById("priceTotal");
+  /* Faixa de clientes */
   let faixa = "";
   const chips = document.querySelectorAll("#faixas button");
-
-  function selectFaixa(val) {
-    faixa = val;
-    chips.forEach((c) => c.setAttribute("aria-checked", String(c.dataset.v === val)));
+  function selectFaixa(v) {
+    faixa = v;
+    chips.forEach((b) => b.setAttribute("aria-checked", b.dataset.v === v ? "true" : "false"));
     document.getElementById("faixa-err").textContent = "";
   }
-
-  clientSlider.addEventListener("input", () => {
-    const qty = Number(clientSlider.value);
-    sliderCountText.textContent = qty === 1 ? "1 cliente" : `${qty} clientes`;
-    priceTotal.innerHTML = `R$ ${(qty * 20).toLocaleString("pt-BR")} <small>/ mês</small>`;
-
-    if (qty <= 5) selectFaixa("1 a 5");
-    else if (qty <= 15) selectFaixa("6 a 15");
-    else if (qty <= 30) selectFaixa("16 a 30");
-    else selectFaixa("Mais de 30");
-  });
-
-  /* Menu móvel */
-  const menuBtn = document.getElementById("menuBtn");
-  const mobileNav = document.getElementById("mobileNav");
-  menuBtn.addEventListener("click", () => {
-    const open = mobileNav.classList.toggle("open");
-    menuBtn.setAttribute("aria-expanded", String(open));
-  });
-  mobileNav.querySelectorAll("a").forEach((a) => a.addEventListener("click", () => {
-    mobileNav.classList.remove("open");
-    menuBtn.setAttribute("aria-expanded", "false");
-  }));
-
-  /* Máscara de WhatsApp */
-  const whatsapp = document.getElementById("whatsapp");
-  function maskPhone(v) {
-    const d = v.replace(/\D/g, "").slice(0, 11);
-    if (d.length <= 2) return d.length ? `(${d}` : "";
-    if (d.length <= 6) return `(${d.slice(0, 2)}) ${d.slice(2)}`;
-    if (d.length <= 10) return `(${d.slice(0, 2)}) ${d.slice(2, 6)}-${d.slice(6)}`;
-    return `(${d.slice(0, 2)}) ${d.slice(2, 7)}-${d.slice(7)}`;
-  }
-  whatsapp.addEventListener("input", () => { whatsapp.value = maskPhone(whatsapp.value); });
-
-  /* Faixa de clientes (cliques manuais) */
   chips.forEach((b) => b.addEventListener("click", () => selectFaixa(b.dataset.v)));
 
   /* Validação e envio */
@@ -1077,7 +620,7 @@
     let ok = true;
     if (data.nome.trim().length < 2) { setErr("nome", "Informe seu nome"); ok = false; } else setErr("nome");
     if (data.agencia.trim().length < 2) { setErr("agencia", "Informe o nome da agência"); ok = false; } else setErr("agencia");
-    if (!/^\(\d{2}\) \d{4,5}-\d{4}$/.test(data.whatsapp)) { setErr("whatsapp", "Informe um WhatsApp válido"); ok = false; } else setErr("whatsapp");
+    if (!/^\(\d{2}\) \d{4,5}-\d{4}$/.test(data.whatsapp)) { setErr("whatsapp", "Use o formato (00) 00000-0000"); ok = false; } else setErr("whatsapp");
     if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(data.email.trim())) { setErr("email", "Informe um e-mail válido"); ok = false; } else setErr("email");
     document.getElementById("faixa-err").textContent = faixa ? "" : "Escolha uma opção";
     if (!faixa) ok = false;
@@ -1086,6 +629,16 @@
     if (!consent.checked) ok = false;
     return ok;
   }
+
+  /* Máscara simples do WhatsApp */
+  document.getElementById("whatsapp").addEventListener("input", (e) => {
+    const d = e.target.value.replace(/\D/g, "").slice(0, 11);
+    let out = d;
+    if (d.length > 6) out = `(${d.slice(0, 2)}) ${d.slice(2, d.length > 10 ? 7 : 6)}-${d.slice(d.length > 10 ? 7 : 6)}`;
+    else if (d.length > 2) out = `(${d.slice(0, 2)}) ${d.slice(2)}`;
+    else if (d.length > 0) out = `(${d}`;
+    e.target.value = out;
+  });
 
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
@@ -1112,17 +665,9 @@
     }
     payload["cf-turnstile-response"] = cfToken;
 
-    if (!LEAD_ENDPOINT) {
-      formError.textContent = "Formulário não configurado: defina LEAD_ENDPOINT no código.";
-      formError.hidden = false;
-      return;
-    }
-
     submitBtn.disabled = true;
     submitBtn.innerHTML = '<span class="spinner" aria-hidden="true"></span> Enviando';
     try {
-      /* Envio form-urlencoded (requisição simples, sem preflight). O Apps Script responde JSON
-         legível: {"ok":true} só quando o Turnstile foi validado e a linha foi gravada. */
       payload.website = (document.getElementById("website") || {}).value || "";
       const body = new URLSearchParams(Object.entries(payload).map(([k, v]) => [k, v == null ? "" : String(v)]));
       const res = await fetch(LEAD_ENDPOINT, { method: "POST", body });
@@ -1131,11 +676,11 @@
       document.getElementById("formWrap").innerHTML = `
         <div class="glass success" role="status">
           <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M8 12l3 3 5-6"/></svg>
-          <p>Cadastro recebido! Próximo passo: crie seu primeiro acesso de teste.</p>
+          <h3>Cadastro recebido</h3>
+          <p>Próximo passo: crie seu primeiro acesso de teste.</p>
           <a class="btn btn-primary" href="${APP_CADASTRO_URL}">Criar meu primeiro acesso →</a>
         </div>`;
       if (typeof window.fbq === "function") window.fbq("track", "Lead");
-      if (!APP_CADASTRO_URL) console.warn("APP_CADASTRO_URL não configurada");
     } catch (err) {
       submitBtn.disabled = false;
       submitBtn.textContent = "Quero meu teste grátis →";
@@ -1146,11 +691,10 @@
   });
 </script>
 <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+
+<!-- Cookies e Pixel da Meta (carregado só após aceite) -->
 <div class="cookie-banner" id="cookieBanner" hidden role="dialog" aria-label="Preferências de cookies">
-  <div class="cb-text">
-    <svg class="cb-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/><circle cx="8.5" cy="10" r="1" fill="currentColor"/><circle cx="12.5" cy="15.5" r="1" fill="currentColor"/><circle cx="8" cy="15" r="0.8" fill="currentColor"/></svg>
-    <p style="margin:0"><strong>Este site usa cookies</strong>Usamos cookies de medição de anúncios (Pixel da Meta) para entender a origem dos cadastros. Você pode aceitar, recusar ou saber mais na <a href="privacidade.html" target="_blank" rel="noopener">Política de Privacidade</a>.</p>
-  </div>
+  <p><strong>Este site usa cookies.</strong> Usamos o Pixel da Meta para entender a origem dos cadastros. Veja a <a href="privacidade.html" target="_blank" rel="noopener">Política de Privacidade</a>.</p>
   <div class="cb-actions">
     <button type="button" id="cbDecline">Recusar</button>
     <button type="button" class="cb-accept" id="cbAccept">Aceitar cookies</button>
