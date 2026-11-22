@@ -255,6 +255,58 @@
     .cookie-banner .cb-actions { width: 100%; }
     .cookie-banner .cb-actions button { flex: 1; }
   }
+
+  /* ===== Ajuste premium: mais contraste e brilho (só CSS) ===== */
+  body {
+    background-image: radial-gradient(1200px 700px at 80% -10%, rgba(150, 70, 255, 0.34), transparent 62%),
+                      radial-gradient(900px 600px at -8% 40%, rgba(110, 50, 230, 0.22), transparent 60%),
+                      radial-gradient(800px 500px at 50% 110%, rgba(100, 40, 230, 0.18), transparent 60%);
+  }
+  .text-gradient {
+    background: linear-gradient(90deg, #9d6bff, #c9a8ff 50%, #f1e8ff);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+    filter: drop-shadow(0 0 18px rgba(150, 90, 255, 0.35));
+  }
+  .eyebrow { color: #c9a8ff; text-shadow: 0 0 14px rgba(150,90,255,.6); }
+  h1, h2 { color: #ffffff; text-shadow: 0 2px 30px rgba(120, 60, 255, 0.25); }
+  p { color: #c7c0e0; }
+  .btn-primary {
+    background: linear-gradient(135deg, #6a22ff, #8a4dff 55%, #b07cff);
+    box-shadow: 0 0 0 1px rgba(200,170,255,.25), 0 14px 40px -8px rgba(150, 80, 255, .95), inset 0 1px 0 rgba(255,255,255,.35);
+    font-weight: 700;
+  }
+  .btn-primary:hover { box-shadow: 0 0 0 1px rgba(220,200,255,.4), 0 18px 48px -6px rgba(170, 100, 255, 1), inset 0 1px 0 rgba(255,255,255,.4); }
+  .btn-ghost { border-color: rgba(190,150,255,.45); color: #fff; background: rgba(120,60,255,.08); }
+  .glass {
+    background: linear-gradient(180deg, rgba(60,36,120,0.55), rgba(20,12,44,0.55));
+    border: 1px solid rgba(180,140,255,.28);
+    box-shadow: 0 0 0 1px rgba(120,70,255,.08), 0 24px 60px -24px rgba(120, 60, 255, .55), inset 0 1px 0 rgba(255,255,255,.12);
+  }
+  .mock {
+    box-shadow: 0 0 0 1px rgba(170,120,255,.35), 0 40px 100px -20px rgba(140, 70, 255, .75), inset 0 1px 0 rgba(255,255,255,.18);
+  }
+  .mock-post { background: rgba(10,6,22,.7); border-color: rgba(170,120,255,.3); }
+  .mock-post strong { color: #fff; }
+  .pill { background: rgba(251,191,36,.16); color: #ffd36b; box-shadow: 0 0 14px rgba(251,191,36,.25); }
+  .bar i { background: linear-gradient(90deg,#7a3bff,#c9a8ff); box-shadow: 0 0 14px rgba(160,100,255,.8); }
+  .feat-icon {
+    background: linear-gradient(135deg, rgba(140,80,255,.35), rgba(90,40,200,.2));
+    border-color: rgba(200,170,255,.45);
+    box-shadow: 0 0 22px rgba(140, 80, 255, .45), inset 0 1px 0 rgba(255,255,255,.2);
+  }
+  .feat-icon svg { stroke: #f1e8ff; }
+  .pain, .step { border-color: rgba(170,120,255,.25); }
+  .steps, .pain-grid, .trust, .faq-list { border-top-color: rgba(170,120,255,.35); }
+  .step .n { color: #c9a8ff; }
+  .price .amount { background: linear-gradient(180deg,#ffffff,#d7c4ff); -webkit-background-clip: text; background-clip: text; color: transparent; filter: drop-shadow(0 0 24px rgba(150,90,255,.45)); }
+  .price, .example { background: linear-gradient(180deg, rgba(70,40,140,.6), rgba(20,12,44,.6)); }
+  .example .note, .form-note, .platforms, .hero .micro { color: #a79fc6; }
+  .field { background: rgba(10,6,22,.7); border-color: rgba(190,150,255,.35); }
+  .chips button { border-color: rgba(190,150,255,.4); color: #ddd3f5; }
+  .chips button[aria-checked="true"] { background: linear-gradient(135deg,#6a22ff,#b07cff); box-shadow: 0 0 18px rgba(150,90,255,.6); }
+  details.faq summary { color: #fff; }
+  header.top { background: rgba(8,5,18,.75); border-bottom-color: rgba(170,120,255,.25); }
+  footer { border-top-color: rgba(170,120,255,.25); }
 </style>
 </head>
 <body id="topo">
