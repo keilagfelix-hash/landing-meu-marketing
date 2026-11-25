@@ -169,6 +169,12 @@
     .menu-btn { display: block; }
   }
 
+  .top-actions { display: flex; align-items: center; gap: 10px; }
+  .btn-outline { background: rgba(255,255,255,.05); color: var(--fg); border: 1px solid rgba(148,82,255,.32); }
+  .btn-outline:hover { background: rgba(255,255,255,.09); }
+  .center-cards .card { text-align: center; }
+  .center-cards .icon-tile { margin-left: auto; margin-right: auto; }
+
   /* hero */
   .hero { padding-top: 136px; padding-bottom: 84px; }
   .hero-grid { display: grid; gap: 56px; align-items: center; }
@@ -427,7 +433,10 @@
       <a href="#preco">Simulador</a>
       <a href="#duvidas">Dúvidas</a>
     </nav>
-    <a class="btn btn-primary btn-nav" href="#teste">Testar grátis</a>
+    <div class="top-actions">
+      <a class="btn btn-outline btn-nav" href="https://meumarketing.app.br/login">Acessar minha conta</a>
+      <a class="btn btn-primary btn-nav" href="#teste">Testar grátis</a>
+    </div>
     <button class="menu-btn" id="menuBtn" aria-label="Abrir menu" aria-expanded="false" aria-controls="mobileNav">
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
     </button>
@@ -437,6 +446,7 @@
     <a href="#para-quem-e">Para quem é</a>
     <a href="#preco">Simulador</a>
     <a href="#duvidas">Dúvidas</a>
+    <a class="btn btn-outline" href="https://meumarketing.app.br/login">Acessar minha conta</a>
     <a class="btn btn-primary" href="#teste">Testar grátis</a>
   </nav>
 </header>
@@ -515,7 +525,7 @@
         <p class="eyebrow">O problema</p>
         <h2>O WhatsApp não foi feito para <span class="text-gradient">aprovar conteúdo</span></h2>
       </div>
-      <div class="grid g4">
+      <div class="grid g4 center-cards">
         <article class="glass interactive-card card reveal">
           <div class="icon-tile"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><path d="M4 4l16 16"/></svg></div>
           <h3>Aprovação perdida no grupo</h3>
@@ -601,7 +611,7 @@
         <p class="eyebrow">Como funciona</p>
         <h2>Do rascunho à publicação em 4 passos</h2>
       </div>
-      <ol class="grid g4" style="padding:0;margin:0;list-style:none">
+      <ol class="grid g4 center-cards" style="padding:0;margin:0;list-style:none">
         <li class="glass interactive-card card step reveal"><span class="text-gradient">01</span><h3>Equipe prepara</h3><p>A equipe sobe a arte e a legenda do conteúdo no app.</p></li>
         <li class="glass interactive-card card step reveal"><span class="text-gradient">02</span><h3>Gestor revisa</h3><p>Só a versão liberada pelo gestor chega ao cliente.</p></li>
         <li class="glass interactive-card card step reveal"><span class="text-gradient">03</span><h3>Cliente decide</h3><p>O cliente aprova ou pede ajuste, com histórico de versões.</p></li>
